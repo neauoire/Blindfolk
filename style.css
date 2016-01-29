@@ -4,8 +4,12 @@
 
 body { background:#111;}
 
-.entry { display: block;unicode-bidi: embed;font-family: monospace;white-space: pre;padding:15px;width:calc(100vw - 30px);max-width:calc(100vw - 30px);height:310px;position: absolute; top:0px; left:0px;border:0px;}
+.entry { display: block;unicode-bidi: embed;font-family: monospace;white-space: pre;padding:15px;width:calc(100vw - 30px);max-width:calc(100vw - 30px);height:calc(100vh - 30px);max-height:calc(100vh - 30px);position: absolute; top:0px; left:0px;border:0px; line-height: 20px; font-family: 'Input Mono'; font-size:12px;}
 .entry#terminal { background: transparent; z-index:9000; color:rgba(0,0,0,0); resize: none;}
-.entry#render { background: #444; color:white; z-index:0; resize: none;}
+.entry#render { background: #222; color:#999; z-index:0; resize: none;}
 
-.sh_test { background: black; color:white;}
+.sh_case { color:#666; background:#000;}
+.sh_action { color:#fff;}
+.sh_indent { color:#444;}
+.sh_event { color:#fff; display:inline-block; border-bottom: 1px solid #444; line-height: 12px}
+.sh_method { color:orange;}

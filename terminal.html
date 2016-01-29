@@ -4,6 +4,10 @@
   <script src='script.js'></script>
 </head>
 
+<div class='tabs'>
+  <div class='tab'>Alice's Fighting Style</div>
+</div>
+
 <textarea class='entry' id='terminal'>
 
 case hit.high
@@ -16,13 +20,13 @@ case bump.forward
 
   turn.right
   move.east
-  move.up
+  turn.right
   hit.low
 
 case else
 
-  move.east
-  move.north
+  move.forward
+  turn.right
   hit.low
 
 </textarea>
