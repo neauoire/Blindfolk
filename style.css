@@ -4,9 +4,12 @@
 
 body { background:#111;}
 
-.status { background:#222; color:#999; line-height: 20px; font-size:12px; text-transform: uppercase; padding: 15px 15px 0px 15px; width:calc(50vw - 30px); left:50vw; position: absolute;}
+.status { background:#111; color:#999; line-height: 20px; font-size:12px; text-transform: uppercase;width:calc(75vw - 30px); left:25vw; position: absolute;}
+.status a { display: inline-block;line-height: 45px;padding: 0px 15px 0px 15px; }
+.status a.active { color: #555; background:#222;}
+.status a:hover { color:#fff; }
 
-.entry { display: block;unicode-bidi: embed;font-family: monospace;white-space: pre;padding:15px;width:calc(50vw - 30px);min-width:calc(50vw - 30px);height:calc(100vh - 50px);max-height:calc(100vh - 50px);position: absolute; top:35px; left:50vw;border:0px; line-height: 20px; font-size:12px; padding-top: 0px}
+.entry { display: block;unicode-bidi: embed;white-space: pre;padding:15px;width:calc(75vw - 30px);min-width:calc(75vw - 30px);height:calc(100vh - 75px);max-height:calc(100vh - 65px);position: absolute; top:45px; left:25vw;border:0px; line-height: 20px; font-size:12px; }
 .entry#terminal { background: transparent; z-index:9000; color:rgba(0,0,0,0); resize: none;}
 .entry#render { background: #222; color:#999; z-index:0; resize: none;}
 
@@ -16,3 +19,4 @@ body { background:#111;}
 .sh_event { color:#fff; display:inline-block; border-bottom: 1px solid #444; line-height: 12px}
 .sh_method { color:orange;}
 
+.options { background: red;width:calc(25vw - 30px);line-height: 20px;font-size:12px;top: 45px;position: absolute;padding: 15px}
