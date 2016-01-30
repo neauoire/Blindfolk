@@ -1,12 +1,19 @@
 
 $(document).ready(function()
 {
+	renderTerminal();
+
 	$('#terminal').bind('input propertychange', function()
 	{
-		var text = syntaxHighlight($('#terminal').val());
-		$('#render').html(text+"_");
+		renderTerminal();
 	});
 });
+
+function renderTerminal()
+{
+	var text = syntaxHighlight($('#terminal').val());
+	$('#render').html(text+"_");
+}
 
 function syntaxHighlight(text)
 {
@@ -34,7 +41,7 @@ function syntaxHighlight(text)
 	return text;
 }
 
-String.prototype.replaceAll = function(search, replacement) {
+String.prototype.replaceAll = function(search, replacement){
     var target = this;
     return target.split(search).join(replacement);
 };
