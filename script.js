@@ -1,11 +1,25 @@
 
 $(document).ready(function()
 {
+	renderTimeline();
 	renderTerminal();
 
-	$('#terminal').bind('input propertychange', function()
-	{
-		renderTerminal();
+	$('#terminal').bind('input propertychange', function(){ renderTerminal(); });
+
+	$('#tab_render').bind( "click", function() { 
+		$('#terminal').show();
+		$('#render').show(); $('#timeline').hide(); $('#documentation').hide(); 
+		$('#tab_render').attr('class','active'); $('#tab_timeline').attr('class',''); $('#tab_documentation').attr('class',''); 
+	});
+	$('#tab_timeline').bind( "click", function() { 
+		$('#terminal').hide();
+		$('#render').hide(); $('#timeline').show(); $('#documentation').hide(); 
+		$('#tab_render').attr('class',''); $('#tab_timeline').attr('class','active'); $('#tab_documentation').attr('class',''); 
+	});
+	$('#tab_documentation').bind( "click", function() { 
+		$('#terminal').hide();
+		$('#render').hide(); $('#timeline').hide(); $('#documentation').show(); 
+		$('#tab_render').attr('class',''); $('#tab_timeline').attr('class',''); $('#tab_documentation').attr('class','active'); 
 	});
 });
 
@@ -13,6 +27,12 @@ function renderTerminal()
 {
 	var text = syntaxHighlight($('#terminal').val());
 	$('#render').html(text+"_");
+}
+
+function renderTimeline()
+{
+	var text = syntaxHighlight($('#timeline').text());
+	$('#timeline').html(text);
 }
 
 function syntaxHighlight(text)
