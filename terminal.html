@@ -6,39 +6,50 @@
 
 <div class='status'>
 <a id='tab_render' class='active'># Fighting Style</a>
-<a id='tab_timeline'># Turn 3901</a>
+<a id='tab_timeline'># Turn 391</a>
 <a id='tab_documentation'># Documentation</a>
 </div>
 
 <div class='options'>
-  <ul>
-    <li>Alice #2315</li>
-    <li>Health 9/10</li>
+  <a href='' class='logo'></a>
+  <ul class='player'>
+    <li>Blindfolk(#2315)</li>
     <li>Rank 1,302</li>
-    <li>Ratio 24K:49D</li>
-    <li></li>
+  </ul>
+  <ul class='server'>
+    <li>Turn 392</li>
+    <li>9 Minutes Left</li>
+    <li>153 Players</li>
+    <li>4x7 Dojo</li>
+  </ul>
+  <ul>
+    <li>About</li>
   </ul>
 </div>
 
 <textarea class='entry' id='terminal'>
-case hit.high
+case attack.high
 
   block.high
-  hit.low
+  attack.low
   move.back
 
 case bump.forward
 
   turn.right
-  move.east
+  attack.high
   turn.right
-  hit.low
+  attack.low
 
-case else
+case death
+  
+  say take that!
+
+case default
 
   move.forward
   turn.right
-  hit.low
+  attack.low
   say hello
 
 </textarea>
@@ -46,10 +57,13 @@ case else
 <div class='entry' id='render'>
 </div>
 
-<div class='entry' id='timeline'># Turn 391
+<div class='entry' id='timeline'>- Turn 391 (17 Blindfolks 3x5 Dojo)
 
+# Act 1
 You step forward.[0]
 You turn rightward.[1]
+
+# Act 2
 Blindfolk(#1325) attacks you from the back![0]
   You move forward.[2]
   You turn right.[3]
@@ -63,7 +77,7 @@ Blindfolk(#1325) attacks you from the back![0]
       Blinkfolk(#1325) dies.
 </div>
 
-<div class='entry' id='documentation'>
+<div class='entry' id='documentation'>More details soon
 </div>
 
 

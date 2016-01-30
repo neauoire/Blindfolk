@@ -39,17 +39,19 @@ function syntaxHighlight(text)
 {
 	// Main
 	text = text.replaceAll("case ", "<span class='sh_case'>case</span> ");
-	text = text.replaceAll("default ", "<span class='sh_case'>default</span> ");
 	// Actions
 	text = text.replaceAll("block.", "<span class='sh_action'>block</span>.");
 	text = text.replaceAll("move.", "<span class='sh_action'>move</span>.");
-	text = text.replaceAll("hit.", "<span class='sh_action'>hit</span>.");
+	text = text.replaceAll("attack.", "<span class='sh_action'>attack</span>.");
 	text = text.replaceAll("turn.", "<span class='sh_action'>turn</span>.");
 	text = text.replaceAll("charge.", "<span class='sh_action'>charge</span>.");
 	text = text.replaceAll("say ", "<span class='sh_action'>say</span> ");
 	// Events
 	text = text.replaceAll(" bump", " <span class='sh_event'>bump</span>");
-	text = text.replaceAll(" hit", " <span class='sh_event'>hit</span>");
+	text = text.replaceAll(" attack", " <span class='sh_event'>attack</span>");
+	text = text.replaceAll(" death", " <span class='sh_event'>death</span>");
+	text = text.replaceAll(" hit", " <span class='sh_event'>death</span>");
+	text = text.replaceAll(" default", " <span class='sh_event'>default</span>");
 	// Methods
 	text = text.replaceAll(".high", ".<span class='sh_method'>high</span>");
 	text = text.replaceAll(".low", ".<span class='sh_method'>low</span>");

@@ -4,12 +4,12 @@
 
 body { background:#111;}
 
-.status { background:#111; color:#999; line-height: 20px; font-size:12px; text-transform: uppercase;width:calc(75vw - 30px); left:25vw; position: absolute;}
+.status { background:#111; color:#999; line-height: 20px; font-size:12px; text-transform: uppercase;width:calc(100vw - 175px); left:175px; position: absolute;}
 .status a { display: inline-block;line-height: 45px;padding: 0px 15px 0px 15px; }
 .status a.active { color: #555; background:#222;}
 .status a:hover { color:#777; cursor: pointer}
 
-.entry { display: block;unicode-bidi: embed;white-space: pre;padding:15px;width:calc(75vw - 30px);min-width:calc(75vw - 30px);height:calc(100vh - 75px);max-height:calc(100vh - 65px);position: absolute; top:45px; left:25vw;border:0px; line-height: 20px; font-size:12px; }
+.entry { display: block;unicode-bidi: embed;white-space: pre;padding:15px;width:calc(100vw - 30px - 175px);min-width:calc(100vw - 30px - 175px);height:calc(100vh - 75px);max-height:calc(100vh - 65px);position: absolute; top:45px; left:175px;border:0px; line-height: 20px; font-size:12px; }
 .entry#terminal { background: transparent; z-index:9000; color:rgba(0,0,0,0); resize: none;}
 .entry#render { background: #222; color:#999; z-index:0; resize: none;}
 .entry#timeline { background: #222; color:#999; z-index:0; resize: none; display: none}
@@ -21,4 +21,7 @@ body { background:#111;}
 .sh_event { color:#fff; display:inline-block; border-bottom: 1px solid #444; line-height: 12px}
 .sh_method { color:orange;}
 
-.options { color:white; width:calc(25vw - 30px);line-height: 20px;font-size:12px;top: 45px;position: absolute;padding: 15px}
+.options { color:white; width:175px;line-height: 20px;font-size:12px;top: 0px;position: absolute;}
+.options li { padding:0px 15px;}
+.options .logo { padding:0px; width:175px; height:175px; display:block; margin-bottom: 15px}
+.options .player,.options .server { border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 15px}
