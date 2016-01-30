@@ -39,8 +39,25 @@ $(document).ready(function()
 
 function loadDocumentation()
 {
+	$('#documentation').text("");
+
 	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.documentation.php", data: {} }).done(function( content_raw ) {
-		console.log(content_raw);
+		var documentation = JSON.parse(content_raw);
+
+		var documentationText = "";
+
+		$.each(documentation["cases"][0], function( _case, value ) {
+			documentationText += "<span class='sh_case'>case</span> <span class='sh_event'>"+_case+"</span> ";
+			// Methods
+			documentationText += "[ ";
+			$.each(value['methods'], function( index, _method ) {
+				documentationText += ".<span class='sh_method'>"+_method+"</span> ";
+			});
+			documentationText += "]\n";
+			documentationText += "<span class=''>"+value["docs"]+"</span>\n\n";
+		});
+
+		$('#documentation').html(documentationText);
 	});
 }
 
