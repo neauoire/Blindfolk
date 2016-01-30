@@ -1,10 +1,20 @@
 
 $(document).ready(function()
 {
+
 	renderTimeline();
 	renderTerminal();
 
-	$('#terminal').bind('input propertychange', function(){ renderTerminal(); });
+	$('#terminal').bind('input propertychange', function(){ 
+		renderTerminal();
+		$('#save').css('display','inline-block');
+	});
+
+	$('#save').bind( "click", function() { 
+		save();
+	});
+
+	// Bind Tabs
 
 	$('#tab_render').bind( "click", function() { 
 		$('#terminal').show();
@@ -21,7 +31,13 @@ $(document).ready(function()
 		$('#render').hide(); $('#timeline').hide(); $('#documentation').show(); 
 		$('#tab_render').attr('class',''); $('#tab_timeline').attr('class',''); $('#tab_documentation').attr('class','active'); 
 	});
+
 });
+
+function save()
+{
+	$('#save').css('display','none');
+}
 
 function renderTerminal()
 {
