@@ -1,12 +1,13 @@
+var hash = "909a"
 
 $(document).ready(function()
 {
-
 	renderTimeline();
 	renderTerminal();
 
 	$('#terminal').bind('input propertychange', function(){ 
 		renderTerminal();
+		$('#save').text('Save');
 		$('#save').css('display','inline-block');
 	});
 
@@ -32,11 +33,25 @@ $(document).ready(function()
 		$('#tab_render').attr('class',''); $('#tab_timeline').attr('class',''); $('#tab_documentation').attr('class','active'); 
 	});
 
+	loadDocumentation();
+
 });
+
+function loadDocumentation()
+{
+	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.documentation.php", data: {} }).done(function( content_raw ) {
+		console.log(content_raw);
+	});
+}
 
 function save()
 {
-	$('#save').css('display','none');
+	$('#save').text('Saving..');
+
+	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.terminal.php", data: { values:"[["+hash+"]]"+$('#terminal').val() }}).done(function( content_raw ) {
+		console.log(content_raw);
+		$('#save').text('Saved..').fadeOut( "slow", function() { });;
+	});
 }
 
 function renderTerminal()
