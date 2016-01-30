@@ -19,11 +19,11 @@ body { background:#111;}
 .sh_action { color:#fff;}
 .sh_indent { color:#444;}
 .sh_event { color:#fff; display:inline-block; border-bottom: 1px solid #444; line-height: 12px}
-.sh_method { color:orange;}
+.sh_method { color:#ffe7a5;}
 
 .options { color:white; width:175px;line-height: 17px;font-size:11px;top: 0px;position: absolute;}
 .options li { padding:0px 30px; color:#777;}
-.options li strong { color:orange;}
+.options li strong { color:#ffe7a5;}
 .options li a { color:white; text-decoration: underline;}
 .options li i { font-style: normal; color: #aaa}
 .options .logo { padding:30px; width:115px; height:115px; display:block; margin-bottom: 15px;}
