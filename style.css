@@ -19,4 +19,4 @@ body { background:#111;}
 .sh_event { color:#fff; display:inline-block; border-bottom: 1px solid #444; line-height: 12px}
 .sh_method { color:orange;}
 
-.options { background: red;width:calc(25vw - 30px);line-height: 20px;font-size:12px;top: 45px;position: absolute;padding: 15px}
+.options { color:white; width:calc(25vw - 30px);line-height: 20px;font-size:12px;top: 45px;position: absolute;padding: 15px}
