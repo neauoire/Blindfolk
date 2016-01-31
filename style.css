@@ -17,11 +17,16 @@ body { background:#111;}
 .entry#timeline { background: #222; color:#999; z-index:0; resize: none; display: none}
 .entry#documentation { background: #222; color:#999; z-index:0; resize: none; display: none}
 
+/* Terminal */
 .sh_case { color:#666; background:#000;}
 .sh_action { color:#fff;}
 .sh_indent { color:#444;}
 .sh_event { color:#fff; display:inline-block; border-bottom: 1px solid #444; line-height: 12px}
 .sh_method { color:#ffe7a5;}
+/* Timeline */
+blindfolk { display:inline; color:#ffe7a5; }
+phase { display:inline; color:#555; }
+riposte { display: inline-block; padding-left:15px; line-height: 0px}
 
 .options { color:white; width:175px;line-height: 17px;font-size:11px;top: 0px;position: absolute;}
 .options li { padding:0px 30px; color:#777;}

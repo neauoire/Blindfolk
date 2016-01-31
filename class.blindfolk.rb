@@ -13,7 +13,7 @@ class Blindfolk
 		@orientation = 0
 		@x = 0
 		@y = 0
-		@name = "Blindfolk ##{@id}"
+		@name = "<blindfolk>Blindfolk ##{@id}</blindfolk>"
 
 	end
 
@@ -249,6 +249,7 @@ class Blindfolk
 
 		# Riposte
 
+		log("<riposte>")
 		if @rules["collide.#{caseOrientation}"]
 			log("#{@name} [combo].")
 			@status = "collide.#{caseOrientation}"
@@ -261,6 +262,7 @@ class Blindfolk
 		else
 			log("#{@name} idle.")
 		end
+		log("</riposte>")
 
 	end
 
@@ -286,6 +288,7 @@ class Blindfolk
 		end
 
 		# Riposte
+		log("<riposte>")
 		if @rules["attack.#{caseOrientation}"]
 			log("#{@name} [riposte].")
 			@status = "attack.#{caseOrientation}"
@@ -295,7 +298,10 @@ class Blindfolk
 			end
 			@status = "default"
 			@actionIndex = 0
+		else
+			log("#{@name} idles.")			
 		end
+		log("</riposte>")
 
 	end
 

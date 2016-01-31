@@ -33,7 +33,7 @@ def runPhase
 
 	$phase = 1
 	while $phase <= 10
-		log("# Phase #{$phase}")
+		log("\n<phase># Phase #{$phase}</phase>\n")
 		for player in $players
 			player.act()
 		end
@@ -41,9 +41,11 @@ def runPhase
 		$phase += 1
 	end
 
+	log("\n<phase># Game Over</phase>\n")
+
 	# Save scores
 	for player in $players
-		log("#{player.name}, score: #{player.score}")
+		log("#{player.name} gains #{player.score} point.")
 	end
 
 	# Last blindfolk standing

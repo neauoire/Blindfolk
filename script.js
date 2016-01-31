@@ -1,8 +1,7 @@
-var hash = "909a"
+var hash = "909";
 
 $(document).ready(function()
 {
-	renderTimeline();
 	renderTerminal();
 
 	$('#terminal').bind('input propertychange', function(){ 
@@ -94,11 +93,12 @@ function loadTimeline()
 		var timelineText = "";
 
 		$.each(timeline, function( index, value ) {
-			timelineText += "\nTURN #"+value[0]+"\n\n";
+			timelineText += "TURN #"+value[0]+"\n";
 			timelineText += value[1];
 		});
 
 		$('#timeline').html(timelineText);
+		renderTimeline();
 	});
 }
 
@@ -106,9 +106,11 @@ function save()
 {
 	$('#save').text('Saving..');
 
-	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.terminal.php", data: { values:"[["+hash+"]]"+$('#terminal').val() }}).done(function( content_raw ) {
+	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.terminal.php", data: { hash:hash, script:$('#terminal').val() }}).done(function( content_raw ) {
+		$('#terminal').val(content_raw);
+		$('#save').hide();
 		console.log(content_raw);
-		$('#save').text('Saved..').fadeOut( "slow", function() { });;
+		renderTerminal();
 	});
 }
 
@@ -155,5 +157,4 @@ function syntaxHighlight(text)
 
 String.prototype.replaceAll = function(search, replacement){
     var target = this;
-    return target.split(search).join(replacement);
-};
+    retur
