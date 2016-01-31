@@ -1,104 +1,43 @@
-<head>
-  <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js' ></script>
-  <link rel='stylesheet' type='text/css' href='style.css' />
-  <script src='script.js'></script>
-</head>
+<html>
+  <head>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js' ></script>
+    <link rel='stylesheet' type='text/css' href='style.css' />
+    <script src='script.js'></script>
+  </head>
+  <body>
 
-<div class='status'>
-<a id='tab_render' class='active'># Fighting Style <span id='save'>save</span></a>
-<a id='tab_timeline'># Turn 391</a>
-<a id='tab_documentation'># Documentation</a>
-</div>
+    <div class='status'>
+    <a id='tab_render' class='active'># Fighting Style <span id='save'>save</span></a>
+    <a id='tab_timeline'># Turn 391</a>
+    <a id='tab_documentation'># Documentation</a>
+    </div>
 
-<div class='options'>
-  <a href='' class='logo'>
-    <svg width='115px' height='115px'>
-      <line x1="25%" y1="75%" x2="100%" y2="0%" />
-      <line x1="0%" y1="0%" x2="100%" y2="100%" />
-      <line x1="0%" y1="0%" x2="0%" y2="100%" />
-      <line x1="0%" y1="100%" x2="100%" y2="100%" />
-      <line x1="0%" y1="50%" x2="50%" y2="50%" />
-      <line x1="25%" y1="75%" x2="25%" y2="25%" />
-    </svg>
-  </a>
-  <ul class='player'>
-    <li><strong>Blindfolk</strong>(<a href=''>#2315</a>)</li>
-    <li>Rank <i>1,302</i></li>
-  </ul>
-  <ul class='server'>
-    <li>Next <i>Turn 392</i></li>
-    <li>9 Minutes Left</li>
-    <li>14 Players</li>
-  </ul>
-</div>
+    <div class='options'>
+      <a href='' class='logo'>
+        <svg width='115px' height='115px'>
+          <line x1="25%" y1="75%" x2="100%" y2="0%" />
+          <line x1="0%" y1="0%" x2="100%" y2="100%" />
+          <line x1="0%" y1="0%" x2="0%" y2="100%" />
+          <line x1="0%" y1="100%" x2="100%" y2="100%" />
+          <line x1="0%" y1="50%" x2="50%" y2="50%" />
+          <line x1="25%" y1="75%" x2="25%" y2="25%" />
+        </svg>
+      </a>
+      <ul class='player'>
+        <li><strong>Blindfolk</strong>(<a href='' id='player_id'>#2315</a>)</li>
+        <li>Rank <i>1,302</i></li>
+      </ul>
+      <ul class='server'>
+        <li>Next <i>Turn 392</i></li>
+        <li>9 Minutes Left</li>
+        <li>14 Players</li>
+      </ul>
+    </div>
 
-<textarea class='entry' id='terminal'>
-case attack.forward
+    <textarea class='entry' id='terminal'></textarea>
+    <div class='entry' id='render'></div>
+    <div class='entry' id='timeline'></div>
+    <div class='entry' id='documentation'></div>
 
-  attack.forward
-  move.back
-
-case collide.forward
-
-  turn.right
-  attack.forward
-  turn.right
-  attack.backward
-
-case death
-
-  say Nooo
-
-case kill
-
-  say take that!
-
-case default
-
-  move.forward
-  turn.right
-  attack.low
-  say hello
-
-</textarea>
-
-<div class='entry' id='render'></div>
-
-<div class='entry' id='timeline'></div>
-
-<div class='entry' id='documentation'>TODO:
-
-= Front End
-- Add secret cases
-- Create player pages
-- Create leaderboard
-- Add comment syntax
-- Highline lines with errors
-- Create player
-- Cookies
-- Warning for script too long
-- Don't save scripts without default case
-- Don't save empty scripts
-- Scroll views
-
-= Terminal API
-- Add comment syntax parsing
-- Create a new player
-- Load script on page load
-
-= Timeline API
-- Feed data into the sidebar
-- Ranks
-- Time left until next turn
-- Alive players
-
-= Documentation API
-- Fill in the missing docs
-
-= Misc
-- Create XXIIV wiki documentation
-- Create Github README
-
-</div>
-
-
+  </body>
+</html>

@@ -3,8 +3,8 @@
 
 begin
 
-require "mysql"
-require 'date'
+require 'mysql'
+require 'json'
 
 require_relative "../tools/ocean.rb"
 
@@ -13,9 +13,16 @@ require_relative "../tools/ocean.rb"
 
 $database = Oscean.new()
 $database.connect()
-$database.saveScript(@token,@script)
 
-puts @script
+if @script.to_s != "" then $database.saveScript(@token,@script) end
+
+@script = $database.loadScript(@token)
+
+if @script
+	puts @script.to_json
+else
+	puts $database.createPlayer(@token).to_json
+end
 
 rescue Exception
 

@@ -1,14 +1,13 @@
 var token = readCookie("token");
+var player;
 
 $(document).ready(function()
 {
 	if(!token){
-		var newToken = generateToken();
-		setCookie("token",newToken,100);
+		token = generateToken();
+		setCookie("token",token,100);
 		console.log("Created new player");
 	}
-
-	renderTerminal();
 
 	$('#terminal').bind('input propertychange', function(){ 
 		renderTerminal();
@@ -38,10 +37,24 @@ $(document).ready(function()
 		$('#tab_render').attr('class',''); $('#tab_timeline').attr('class',''); $('#tab_documentation').attr('class','active'); 
 	});
 
+	loadTerminal();
 	loadDocumentation();
 	loadTimeline();
-
 });
+
+function loadTerminal()
+{
+	$('#terminal').text("");
+
+	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.terminal.php", data: { token:token } }).done(function( content_raw ) {
+		player = JSON.parse(content_raw);
+		$('#player_id').text(player.id);
+		$('#terminal').text(player.script);
+		console.log(player);
+		renderTerminal();
+	});
+
+}
 
 function loadDocumentation()
 {
@@ -106,9 +119,9 @@ function save()
 	$('#save').text('Saving..');
 
 	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.terminal.php", data: { token:token, script:$('#terminal').val() }}).done(function( content_raw ) {
-		$('#terminal').val(content_raw);
+		player = JSON.parse(content_raw);
+		$('#terminal').val(player.script);
 		$('#save').hide();
-		console.log(content_raw);
 		renderTerminal();
 	});
 }
@@ -183,6 +196,4 @@ function readCookie(name)
 var generateToken = function()
 {
 	var seg1 = Math.random().toString(36).substr(2);
-	var seg2 = Math.random().toString(36).substr(2);
-    return seg1+seg2; // remove `0.`
-};
+	
