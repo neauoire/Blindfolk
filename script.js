@@ -40,6 +40,8 @@ $(document).ready(function()
 	loadTerminal();
 	loadDocumentation();
 	loadTimeline();
+
+	console.log(countdown());
 });
 
 function loadTerminal()
@@ -108,9 +110,11 @@ function loadTimeline()
 
 	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.timeline.php", data: {} }).done(function( content_raw ) {
 		var timeline = JSON.parse(content_raw);
-		var turn = timeline[0];
+		var day = timeline[0];
 		var logs = timeline[1];
-		$('#timeline').html("! TURN "+turn+"\n"+logs);
+		$('#timeline').html(logs);
+		$('#tab_timeline').html("# DAY "+day);
+		$('#next_day').html("Day "+(parseInt(day)+1));
 	});
 }
 
@@ -167,6 +171,21 @@ function syntaxHighlight(text)
 	return text;
 }
 
+setInterval(function()
+{
+	var seconds = countdown();
+	var secondsUntilNextDay = 900 - (seconds % 900);
+	var minutesUntilNextDay = parseInt(secondsUntilNextDay/60);
+
+	if(minutesUntilNextDay > 0){
+		$('#until_next_day').text(minutesUntilNextDay+" Min "+(secondsUntilNextDay % 60)+" Sec");
+	}
+	else{
+		$('#until_next_day').text((secondsUntilNextDay % 60)+" Seconds left");
+	}
+	
+}, 1000);
+
 String.prototype.replaceAll = function(search, replacement)
 {
     var target = this;
@@ -193,7 +212,11 @@ function readCookie(name)
 	return null;
 }
 
-var generateToken = function()
+function countdown()
 {
-	var seg1 = Math.random().toString(36).substr(2);
-	
+	time = new Date()
+	return (time.getMinutes() * 60) + time.getSeconds(); 
+}
+
+function generateToken()
+{
