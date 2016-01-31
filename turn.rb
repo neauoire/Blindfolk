@@ -33,14 +33,13 @@ def runPhase
 
 	$phase = 1
 	while $phase <= 10
-		log("# Phase: #{$phase}\n")
+		log("# Phase #{$phase}")
 		for player in $players
 			player.act()
 		end
 		if playersAlive == 1 then break end
 		$phase += 1
 	end
-	log("# End\n")
 
 	# Save scores
 	for player in $players
@@ -55,7 +54,14 @@ def runPhase
 		end
 	end
 
-	$database.saveLogs($logs.to_json)
+	# Format logs
+	logsFormatted = ""
+	$logs.each do |phase,logs|
+		logs.each do |log|
+			logsFormatted += "#{log}\n"			
+		end
+	end
+	$database.saveLogs(logsFormatted)
 
 end
 

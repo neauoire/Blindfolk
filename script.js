@@ -88,22 +88,15 @@ function loadTimeline()
 {
 	$('#timeline').text("");
 
-	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.documentation.php", data: {} }).done(function( content_raw ) {
+	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.timeline.php", data: {} }).done(function( content_raw ) {
 
 		var timeline = JSON.parse(content_raw);
 		var timelineText = "";
 
-		console.log(timeline);
-
-		// $.each(timeline["cases"][0], function( _case, value ) {
-		// 	documentationText += "<span class='sh_case'>case</span> <span class='sh_event'>"+_case+"</span> ";
-		// 	documentationText += "[ ";
-		// 	$.each(value['methods'], function( index, _method ) {
-		// 		documentationText += ".<span class='sh_method'>"+_method+"</span> ";
-		// 	});
-		// 	documentationText += "]\n";
-		// 	documentationText += "<span class=''>"+value["docs"]+"</span>\n\n";
-		// });
+		$.each(timeline, function( index, value ) {
+			timelineText += "\nTURN #"+value[0]+"\n\n";
+			timelineText += value[1];
+		});
 
 		$('#timeline').html(timelineText);
 	});
