@@ -4,6 +4,7 @@ class Blindfolk
 
 		@id = id
 		@rules = parse(code)
+		@stamina = 10
 		@actionIndex = 0
 		@status = "default"
 
@@ -43,6 +44,8 @@ class Blindfolk
 
 	def act
 
+		if @stamina < 1 then return end
+
 		actionIndexClamped = @actionIndex % @rules[@status].length
 		command = @rules[@status][actionIndexClamped]
 
@@ -52,9 +55,10 @@ class Blindfolk
 		if command.include?("say ") then act_say(command) end
 		if command.include?("attack.") then act_attack(command) end
 
-		puts "#{@id} [#{@status}] -> #{command} [#{@x},#{@y}:#{@orientation}]"
+		puts "#{@id} [#{@status}] -> #{command} [#{@x},#{@y}:#{@orientation}] stamina:#{@stamina}"
 
 		@actionIndex += 1
+		@stamina -= 1
 
 	end
 
@@ -174,9 +178,10 @@ class Blindfolk
 			@status = "collide.#{caseOrientation}"
 			@actionIndex = 0
 			for riposte in @rules["collide.#{caseOrientation}"]
-				act()
+				self.act()
 			end
 			@status = "default"
+			@actionIndex = 0
 		end
 
 	end
@@ -220,7 +225,7 @@ $players = [p1,p3].shuffle
 # Play
 
 phase = 1
-while phase <= 5
+while phase <= 10
 	puts "-------------"
 	puts "PHASE #{phase}"
 	for player in $players
