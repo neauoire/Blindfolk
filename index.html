@@ -29,7 +29,6 @@
     <li>Next <i>Turn 392</i></li>
     <li>9 Minutes Left</li>
     <li>14 Players</li>
-    <li>4x7 Dojo</li>
   </ul>
 </div>
 
@@ -63,33 +62,13 @@ case default
 
 </textarea>
 
-<div class='entry' id='render'>
-</div>
+<div class='entry' id='render'></div>
 
-<div class='entry' id='timeline'>- Turn 391 (17 Blindfolks 3x5 Dojo)
-
-# Act 1
-You step forward.[0]
-You turn rightward.[1]
-
-# Act 2
-Blindfolk(#1325) attacks you from the back![0]
-  You move forward.[2]
-  You turn right.[3]
-  You turn right.[4]
-  You attack forward.[5]
-    Blindfolk(#1325) moves back.[6]
-    Blindfolk(#1325) turns right.[7]
-    Blindfolk(#1325) turns right.[8]
-    Blindfolk(#1325) attacks you from the front.[9]
-      You attack forward.[6]
-      Blinkfolk(#1325) dies.
-</div>
+<div class='entry' id='timeline'></div>
 
 <div class='entry' id='documentation'>TODO:
 
 = Front End
-- Timeline parser
 - Add secret cases
 - Create player pages
 - Create leaderboard
@@ -104,11 +83,14 @@ Blindfolk(#1325) attacks you from the back![0]
 
 = Terminal API
 - Add comment syntax parsing
+- Create a new player
+- Load script on page load
 
 = Timeline API
 - Feed data into the sidebar
-- Dojo Size
 - Ranks
+- Time left until next turn
+- Alive players
 
 = Documentation API
 - Fill in the missing docs

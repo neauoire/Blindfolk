@@ -45,7 +45,7 @@ def runPhase
 
 	# Save scores
 	for player in $players
-		log("#{player.name} gains #{player.score} point.")
+		log("#{player.name} gains <score>#{player.score} point</score>.")
 	end
 
 	# Last blindfolk standing
@@ -85,6 +85,4 @@ rescue Exception
 	errorTip = "Please report the error to <a href='https://twitter.com/neauoire'>@neauoire</a>, or refresh the page."
 	puts "<p>Actions.api: #{errorName}</p>"
 	puts "<p style='font-size:14px'>#{errorTip}</p>"
-	puts "<p style='font-size:12px'>> #{errorLocation}</p>"
-
-end
+	puts "<p style='font-size:12px'>> #{errorLoca

@@ -85,20 +85,19 @@ function loadDocumentation()
 
 function loadTimeline()
 {
+	console.log("Timeline Loading..");
 	$('#timeline').text("");
 
 	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.timeline.php", data: {} }).done(function( content_raw ) {
 
 		var timeline = JSON.parse(content_raw);
-		var timelineText = "";
+		var turn = timeline[0];
+		var logs = timeline[1];
 
-		$.each(timeline, function( index, value ) {
-			timelineText += "TURN #"+value[0]+"\n";
-			timelineText += value[1];
-		});
+		console.log(logs);
 
-		$('#timeline').html(timelineText);
-		renderTimeline();
+		$('#timeline').html("! TURN "+turn+"\n"+logs);
+		console.log("Timeline loaded.");
 	});
 }
 
@@ -157,4 +156,5 @@ function syntaxHighlight(text)
 
 String.prototype.replaceAll = function(search, replacement){
     var target = this;
-    retur
+    return target.split(search).join(replacement);
+};

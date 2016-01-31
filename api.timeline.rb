@@ -11,7 +11,7 @@ require_relative "../tools/ocean.rb"
 
 $database = Oscean.new()
 $database.connect()
-puts $database.logs.to_json
+puts $database.log.to_json
 
 rescue Exception
 
