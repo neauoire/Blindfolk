@@ -1,11 +1,17 @@
 class Blindfolk
 
 	def initialize id,code
+
 		@id = id
 		@rules = parse(code)
 		stamina = 10
 		@actionIndex = 0
 		@status = "default"
+
+		@orientation = 0
+		@x = 0
+		@y = 0
+
 	end
 
 	def parse code
@@ -37,8 +43,33 @@ class Blindfolk
 	def act phase
 
 		actionIndexClamped = @actionIndex % @rules[@status].length
-		puts "#{@id} [#{status}] -> #{phase} * #{@rules[@status][actionIndexClamped]}"
+		command = @rules[@status][actionIndexClamped]
+
+		if command.include?("move.") then act_move(command) end
+		puts "#{@id} [#{status}] -> #{command} [#{@x},#{@y}]"
+
 		@actionIndex += 1
+	end
+
+	def act_move command
+
+		method = command.sub("move.","")
+		puts "Move: #{method}"
+
+		if method == "forward"
+			if @orientation == 0 then @y += 1 end
+			if @orientation == 1 then @x += 1 end
+			if @orientation == 2 then @y -= 1 end
+			if @orientation == 3 then @x -= 1 end
+		end
+
+		if method == "backward"
+			if @orientation == 0 then @y -= 1 end
+			if @orientation == 1 then @x -= 1 end
+			if @orientation == 2 then @y += 1 end
+			if @orientation == 3 then @x += 1 end
+		end
+
 	end
 
 	def action
@@ -52,7 +83,7 @@ end
 # Make Player1
 code = "
 move.forward
-move.backward
+move.forward
 "
 p1 = Blindfolk.new(1,code)
 
@@ -80,11 +111,13 @@ players = [p1,p2,p3].shuffle
 
 phase = 1
 while phase <= 5
+	puts "-------------"
 	puts "PHASE #{phase}"
 	for player in players
 		player.act(phase)
 	end
 	phase += 1
+	puts "-------------"
 end
 
 puts "SUMMARY"
