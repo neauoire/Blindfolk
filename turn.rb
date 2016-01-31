@@ -46,7 +46,10 @@ class Blindfolk
 		command = @rules[@status][actionIndexClamped]
 
 		if command.include?("move.") then act_move(command) end
-		puts "#{@id} [#{status}] -> #{command} [#{@x},#{@y}]"
+		if command.include?("turn.") then act_turn(command) end
+		if command.include?("step.") then act_step(command) end
+			
+		puts "#{@id} [#{status}] -> #{command} [#{@x},#{@y}:#{@orientation}]"
 
 		@actionIndex += 1
 	end
@@ -54,7 +57,6 @@ class Blindfolk
 	def act_move command
 
 		method = command.sub("move.","")
-		puts "Move: #{method}"
 
 		if method == "forward"
 			if @orientation == 0 then @y += 1 end
@@ -68,6 +70,40 @@ class Blindfolk
 			if @orientation == 1 then @x -= 1 end
 			if @orientation == 2 then @y += 1 end
 			if @orientation == 3 then @x += 1 end
+		end
+
+	end
+
+	def act_step command
+
+		method = command.sub("step.","")
+
+		if method == "left"
+			if @orientation == 0 then @x -= 1 end
+			if @orientation == 1 then @y += 1 end
+			if @orientation == 2 then @x += 1 end
+			if @orientation == 3 then @y -= 1 end
+		end
+
+		if method == "right"
+			if @orientation == 0 then @x += 1 end
+			if @orientation == 1 then @y -= 1 end
+			if @orientation == 2 then @x -= 1 end
+			if @orientation == 3 then @y += 1 end
+		end
+
+	end
+
+	def act_turn command
+
+		method = command.sub("turn.","")
+
+		if method == "right"
+			@orientation = (@orientation + 1) & 3
+		end
+
+		if method == "left"
+			@orientation = (@orientation - 1) & 3
 		end
 
 	end
