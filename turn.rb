@@ -41,7 +41,7 @@ class Blindfolk
 
 	end
 
-	def act phase
+	def act
 
 		actionIndexClamped = @actionIndex % @rules[@status].length
 		command = @rules[@status][actionIndexClamped]
@@ -55,6 +55,7 @@ class Blindfolk
 		puts "#{@id} [#{@status}] -> #{command} [#{@x},#{@y}:#{@orientation}]"
 
 		@actionIndex += 1
+
 	end
 
 	def act_move command
@@ -62,23 +63,22 @@ class Blindfolk
 		method = command.sub("move.","")
 		new_x = @x
 		new_y = @y
-		origin = 0
 
 		if method == "forward"
-			if @orientation == 0 then new_y += 1 ; origin = 2 end
-			if @orientation == 1 then new_x += 1 ; origin = 3 end
-			if @orientation == 2 then new_y -= 1 ; origin = 0 end
-			if @orientation == 3 then new_x -= 1 ; origin = 1 end
+			if @orientation == 0 then new_y += 1 end
+			if @orientation == 1 then new_x += 1 end
+			if @orientation == 2 then new_y -= 1 end
+			if @orientation == 3 then new_x -= 1 end
 		end
 
 		if method == "backward"
-			if @orientation == 0 then new_y -= 1 ; origin = 0 end
-			if @orientation == 1 then new_x -= 1 ; origin = 1 end
-			if @orientation == 2 then new_y += 1 ; origin = 2 end
-			if @orientation == 3 then new_x += 1 ; origin = 3 end
+			if @orientation == 0 then new_y -= 1 end
+			if @orientation == 1 then new_x -= 1 end
+			if @orientation == 2 then new_y += 1 end
+			if @orientation == 3 then new_x += 1 end
 		end
 
-		if enemyAtLocation(new_x,new_y) then enemyAtLocation(new_x,new_y).bump(self,origin) else @x = new_x ; @y = new_y end
+		if enemyAtLocation(new_x,new_y) then collide(enemyAtLocation(new_x,new_y)) else @x = new_x ; @y = new_y end
 
 	end
 
@@ -87,23 +87,22 @@ class Blindfolk
 		method = command.sub("step.","")
 		new_x = @x
 		new_y = @y
-		origin = 0
 
 		if method == "left"
-			if @orientation == 0 then new_x -= 1 ; origin = 1 end
-			if @orientation == 1 then new_y += 1 ; origin = 2 end
-			if @orientation == 2 then new_x += 1 ; origin = 3 end
-			if @orientation == 3 then new_y -= 1 ; origin = 0 end
+			if @orientation == 0 then new_x -= 1 end
+			if @orientation == 1 then new_y += 1 end
+			if @orientation == 2 then new_x += 1 end
+			if @orientation == 3 then new_y -= 1 end
 		end
 
 		if method == "right"
-			if @orientation == 0 then new_x += 1 ; origin = 3 end
-			if @orientation == 1 then new_y -= 1 ; origin = 0 end
-			if @orientation == 2 then new_x -= 1 ; origin = 1 end
-			if @orientation == 3 then new_y += 1 ; origin = 2 end
+			if @orientation == 0 then new_x += 1 end
+			if @orientation == 1 then new_y -= 1 end
+			if @orientation == 2 then new_x -= 1 end
+			if @orientation == 3 then new_y += 1 end
 		end
 
-		if enemyAtLocation(new_x,new_y) then enemyAtLocation(new_x,new_y).bump(self,origin) else @x = new_x ; @y = new_y end
+		if enemyAtLocation(new_x,new_y) then collide(enemyAtLocation(new_x,new_y)) else @x = new_x ; @y = new_y end
 
 	end
 
@@ -134,9 +133,51 @@ class Blindfolk
 
 	end
 
-	def bump player,origin
+	def collide enemy
 
-		puts "Collision [#{player.id} -> #{@id}]"
+		origin_normal = ""
+		caseOrientation = ""
+
+		# North
+		if enemy.x == @x && enemy.y == @y + 1
+			if @orientation == 0 then caseOrientation = "forward" end
+			if @orientation == 1 then caseOrientation = "left" end
+			if @orientation == 2 then caseOrientation = "back" end
+			if @orientation == 3 then caseOrientation = "right" end
+		end
+
+		# East
+		if enemy.x == @x + 1 && enemy.y == @y
+			if @orientation == 0 then caseOrientation = "right" end
+			if @orientation == 1 then caseOrientation = "forward" end
+			if @orientation == 2 then caseOrientation = "left" end
+			if @orientation == 3 then caseOrientation = "back" end
+		end
+
+		# South
+		if enemy.x == @x && enemy.y == @y - 1
+			if @orientation == 0 then caseOrientation = "back" end
+			if @orientation == 1 then caseOrientation = "right" end
+			if @orientation == 2 then caseOrientation = "forward" end
+			if @orientation == 3 then caseOrientation = "left" end
+		end
+
+		# West
+		if enemy.x == @x - 1 && enemy.y == @y
+			if @orientation == 0 then caseOrientation = "left" end
+			if @orientation == 1 then caseOrientation = "back" end
+			if @orientation == 2 then caseOrientation = "right" end
+			if @orientation == 3 then caseOrientation = "forward" end
+		end
+
+		if @rules["collide.#{caseOrientation}"]
+			@status = "collide.#{caseOrientation}"
+			@actionIndex = 0
+			for riposte in @rules["collide.#{caseOrientation}"]
+				act()
+			end
+			@status = "default"
+		end
 
 	end
 
@@ -157,26 +198,24 @@ end
 
 # Make Player1
 code = "
-turn.right
-turn.right
+case default
+  turn.right
+  turn.right
 "
 p1 = Blindfolk.new(1,0,1,code)
 
-# Make Player2
-code = "
-turn.right
-turn.right
-"
-p2 = Blindfolk.new(2,1,1,code)
-
 # Make Player3
 code = "
-move.forward
-move.forward
+case collide.forward
+  step.right
+  step.right
+case default
+  move.forward
+  move.forward
 "
 p3 = Blindfolk.new(3,0,0,code)
 
-$players = [p1,p2,p3].shuffle
+$players = [p1,p3].shuffle
 
 # Play
 
@@ -185,7 +224,7 @@ while phase <= 5
 	puts "-------------"
 	puts "PHASE #{phase}"
 	for player in $players
-		player.act(phase)
+		player.act()
 	end
 	phase += 1
 	puts "-------------"
