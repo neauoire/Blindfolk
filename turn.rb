@@ -7,10 +7,12 @@ class Blindfolk
 		@stamina = 10
 		@actionIndex = 0
 		@status = "default"
+		@isAlive = 1
 
 		@orientation = 0
 		@x = x
 		@y = y
+		@name = "Blindfolk ##{@id}"
 
 	end
 
@@ -24,6 +26,14 @@ class Blindfolk
 
 	def y
 		return @y
+	end
+
+	def name
+		return @name
+	end
+
+	def isAlive
+		return @isAlive
 	end
 
 	def parse code
@@ -44,7 +54,10 @@ class Blindfolk
 
 	def act
 
+		@stamina -= 1
+
 		if @stamina < 1 then return end
+		if @isAlive == 0 then return end
 
 		actionIndexClamped = @actionIndex % @rules[@status].length
 		command = @rules[@status][actionIndexClamped]
@@ -55,10 +68,7 @@ class Blindfolk
 		if command.include?("say ") then act_say(command) end
 		if command.include?("attack.") then act_attack(command) end
 
-		puts "#{@id} [#{@status}] -> #{command} [#{@x},#{@y}:#{@orientation}] stamina:#{@stamina}"
-
 		@actionIndex += 1
-		@stamina -= 1
 
 	end
 
@@ -82,7 +92,13 @@ class Blindfolk
 			if @orientation == 3 then new_x += 1 end
 		end
 
-		if enemyAtLocation(new_x,new_y) then collide(enemyAtLocation(new_x,new_y)) else @x = new_x ; @y = new_y end
+		if enemyAtLocation(new_x,new_y)
+			log("#{@name} attemps to move, but is blocked by #{enemyAtLocation(new_x,new_y).name}.")
+			collide(enemyAtLocation(new_x,new_y)) 
+		else 
+			@x = new_x ; @y = new_y 
+			log("#{@name} moved to #{@x},#{@y}.")
+		end
 
 	end
 
@@ -106,7 +122,54 @@ class Blindfolk
 			if @orientation == 3 then new_y += 1 end
 		end
 
-		if enemyAtLocation(new_x,new_y) then collide(enemyAtLocation(new_x,new_y)) else @x = new_x ; @y = new_y end
+		if enemyAtLocation(new_x,new_y)
+			log("#{@name} attemps to step, but is blocked by #{enemyAtLocation(new_x,new_y).name}.")
+			collide(enemyAtLocation(new_x,new_y)) 
+		else 
+			@x = new_x ; @y = new_y 
+			log("#{@name} moved to #{@x},#{@y}.")
+		end
+
+	end
+
+	def act_attack command
+
+		method = command.sub("attack.","")
+		new_x = @x
+		new_y = @y
+
+		if method == "forward"
+			if @orientation == 0 then new_y += 1 end
+			if @orientation == 1 then new_x += 1 end
+			if @orientation == 2 then new_y -= 1 end
+			if @orientation == 3 then new_x -= 1 end
+		end
+
+		if method == "backward"
+			if @orientation == 0 then new_y -= 1 end
+			if @orientation == 1 then new_x -= 1 end
+			if @orientation == 2 then new_y += 1 end
+			if @orientation == 3 then new_x += 1 end
+		end
+
+		target = enemyAtLocation(new_x,new_y)
+
+		if target
+			log("#{@name} attacks #{target.name}.")
+			target.attacked(self) 
+		else 
+			log("#{@name} attacks nothing #{method} at #{new_x},#{new_y} from #{@x},#{@y}.")
+		end
+
+		# Land blow
+
+		if target && target.x == new_x && target.y == new_y
+			if @stamina > 0
+				kill(target)
+			end
+		else
+			log("Missed")
+		end
 
 	end
 
@@ -122,24 +185,21 @@ class Blindfolk
 			@orientation = (@orientation - 1) & 3
 		end
 
+		log("#{@name} turns #{method}.")
+
 	end
 
 	def act_say command
 
 		value = command.sub("say ","")
-		puts value
-
-	end
-
-	def act_attack command
-
-		method = command.sub("attack.","")
+		log("#{@name} says \"#{value}\".")
 
 	end
 
 	def collide enemy
 
-		origin_normal = ""
+		log("#{@name} collides with \"#{enemy.name}\".")
+
 		caseOrientation = ""
 
 		# North
@@ -174,10 +234,50 @@ class Blindfolk
 			if @orientation == 3 then caseOrientation = "forward" end
 		end
 
+		# Riposte
+
 		if @rules["collide.#{caseOrientation}"]
+			log("#{@name} [combo].")
 			@status = "collide.#{caseOrientation}"
 			@actionIndex = 0
 			for riposte in @rules["collide.#{caseOrientation}"]
+				self.act()
+			end
+			@status = "default"
+			@actionIndex = 0
+		else
+			log("#{@name} idle.")
+		end
+
+	end
+
+	def attacked enemy
+
+		caseOrientation = ""
+
+		if @orientation == 0
+			if enemy.x == @x && enemy.y == @y + 1 then caseOrientation = "forward" end
+			if enemy.x == @x && enemy.y == @y - 1 then caseOrientation = "back" end
+		end
+		if @orientation == 1
+			if enemy.x == @x + 1 && enemy.y == @y then caseOrientation = "forward" end
+			if enemy.x == @x - 1 && enemy.y == @y then caseOrientation = "back" end
+		end
+		if @orientation == 2
+			if enemy.x == @x && enemy.y == @y - 1 then caseOrientation = "forward" end
+			if enemy.x == @x && enemy.y == @y + 1 then caseOrientation = "back" end
+		end
+		if @orientation == 3
+			if enemy.x == @x - 1 && enemy.y == @y then caseOrientation = "forward" end
+			if enemy.x == @x + 1 && enemy.y == @y then caseOrientation = "back" end
+		end
+
+		# Riposte
+		if @rules["attack.#{caseOrientation}"]
+			log("#{@name} [riposte].")
+			@status = "attack.#{caseOrientation}"
+			@actionIndex = 0
+			for riposte in @rules["attack.#{caseOrientation}"]
 				self.act()
 			end
 			@status = "default"
@@ -186,10 +286,25 @@ class Blindfolk
 
 	end
 
+	def kill enemy
+
+		log("#{@name} kills #{enemy.name}.")
+		enemy.die()
+
+	end
+
+	def die
+
+		@isAlive = 0
+		log("#{@name} dies.")
+
+	end
+
 	def enemyAtLocation x,y
 
 		for player in $players
 			if player.id == @id then next end
+			if player.isAlive == 0 then next end
 			if player.x == x && player.y == y then return player end
 		end
 
@@ -199,44 +314,71 @@ class Blindfolk
 
 end
 
+def log event
+
+	if !$logs[$phase] then $logs[$phase] = [] end
+	$logs[$phase].push(event)
+
+end
+
+def playersAlive
+
+	alive = 0
+	$players.each do |player|
+		if player.isAlive == 1 then alive += 1 end
+	end
+	return alive
+
+end
+
 # Create Players
 
 # Make Player1
 code = "
+case attack.back
+  turn.right
 case default
-  turn.right
-  turn.right
+  idle
 "
 p1 = Blindfolk.new(1,0,1,code)
 
 # Make Player3
 code = "
+case attack.forward
+  attack.forward
 case collide.forward
   step.right
   step.right
 case default
-  move.forward
-  move.forward
+  attack.forward
 "
 p3 = Blindfolk.new(3,0,0,code)
 
 $players = [p1,p3].shuffle
 
+$logs = {}
+
 # Play
 
-phase = 1
-while phase <= 10
-	puts "-------------"
-	puts "PHASE #{phase}"
+$phase = 1
+while $phase <= 10
 	for player in $players
 		player.act()
 	end
-	phase += 1
-	puts "-------------"
+	if playersAlive == 1 then break end
+	$phase += 1
 end
 
-puts "SUMMARY"
-puts "[missing]"
+# Print Logs
 
+$logs.each do |phase,events|
+	if events.length == 0 then next end
+	puts "==================="
+	puts "= Phase: #{phase}"
+	puts "==================="
+	events.each do |event|
+		puts "+ #{event}"
+	end
+end
 
 
