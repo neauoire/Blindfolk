@@ -8,6 +8,7 @@ class Blindfolk
 		@actionIndex = 0
 		@status = "default"
 		@isAlive = 1
+		@score = 0
 
 		@orientation = 0
 		@x = x
@@ -15,6 +16,8 @@ class Blindfolk
 		@name = "Blindfolk ##{@id}"
 
 	end
+
+	# Accessors
 
 	def id
 		return @id
@@ -36,6 +39,12 @@ class Blindfolk
 		return @isAlive
 	end
 
+	def score
+		return @score
+	end
+
+	# Parser
+
 	def parse code
 
 		rules = {}
@@ -51,6 +60,8 @@ class Blindfolk
 		return rules
 
 	end
+
+	# Actions
 
 	def act
 
@@ -196,6 +207,8 @@ class Blindfolk
 
 	end
 
+	# Ripostes
+
 	def collide enemy
 
 		log("#{@name} collides with \"#{enemy.name}\".")
@@ -286,9 +299,12 @@ class Blindfolk
 
 	end
 
+	# Events
+
 	def kill enemy
 
 		log("#{@name} kills #{enemy.name}.")
+		@score += 1
 		enemy.die()
 
 	end
@@ -299,6 +315,8 @@ class Blindfolk
 		log("#{@name} dies.")
 
 	end
+
+	# Tools
 
 	def enemyAtLocation x,y
 

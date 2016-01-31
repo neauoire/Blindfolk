@@ -1,3 +1,4 @@
+require_relative "class.blindfolk.rb"
 
 def log event
 
@@ -13,8 +14,9 @@ def playersAlive
 		if player.isAlive == 1 then alive += 1 end
 	end
 
-end
+	return alive
 
+end
 
 # Create Players
 
@@ -43,10 +45,11 @@ $players = [p1,p3].shuffle
 
 $logs = {}
 
-# Play
+# Play (TODO: Don't play less than 2 players are alive)
 
 $phase = 1
 while $phase <= 10
+	log("# Phase: #{$phase}\n")
 	for player in $players
 		player.act()
 	end
@@ -54,15 +57,20 @@ while $phase <= 10
 	$phase += 1
 end
 
+log("# End\n")
+
+# Save scores
+
+for player in $players
+	log("#{player.name}, score: #{player.score}")
+end
+
 # Print Logs
 
 $logs.each do |phase,events|
 	if events.length == 0 then next end
-	puts "==================="
-	puts "= Phase: #{phase}"
-	puts "==================="
 	events.each do |event|
-		puts "+ #{event}"
+		puts "  #{event}"
 	end
 end
 
