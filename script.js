@@ -117,7 +117,7 @@ function syntaxHighlight(text)
 	text = text.replaceAll("charge.", "<span class='sh_action'>charge</span>.");
 	text = text.replaceAll("say ", "<span class='sh_action'>say</span> ");
 	// Events
-	text = text.replaceAll(" bump", " <span class='sh_event'>bump</span>");
+	text = text.replaceAll(" collide", " <span class='sh_event'>collide</span>");
 	text = text.replaceAll(" attack", " <span class='sh_event'>attack</span>");
 	text = text.replaceAll(" death", " <span class='sh_event'>death</span>");
 	text = text.replaceAll(" hit", " <span class='sh_event'>death</span>");
