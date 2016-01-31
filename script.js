@@ -46,7 +46,26 @@ function loadDocumentation()
 
 		var documentationText = "";
 
+		documentationText += "# Introduction\n\n";
+		documentationText += documentation["introduction"]+"\n\n";
+		documentationText += "# Fighting Styles\n\n";
+		documentationText += documentation["fighting"]+"\n\n";
+
+		// Cases
+		documentationText += "# Cases Documentation\n\n";
 		$.each(documentation["cases"][0], function( _case, value ) {
+			documentationText += "<span class='sh_case'>case</span> <span class='sh_event'>"+_case+"</span> ";
+			documentationText += "[ ";
+			$.each(value['methods'], function( index, _method ) {
+				documentationText += ".<span class='sh_method'>"+_method+"</span> ";
+			});
+			documentationText += "]\n";
+			documentationText += "<span class=''>"+value["docs"]+"</span>\n\n";
+		});
+
+		// Actions
+		documentationText += "# Actions Documentation\n\n";
+		$.each(documentation["actions"][0], function( _case, value ) {
 			documentationText += "<span class='sh_case'>case</span> <span class='sh_event'>"+_case+"</span> ";
 			// Methods
 			documentationText += "[ ";
@@ -56,6 +75,9 @@ function loadDocumentation()
 			documentationText += "]\n";
 			documentationText += "<span class=''>"+value["docs"]+"</span>\n\n";
 		});
+
+		documentationText += "# Exit\n\n";
+		documentationText += documentation["credits"]+"\n\n";
 
 		$('#documentation').html(documentationText);
 	});
