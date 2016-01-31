@@ -1,6 +1,6 @@
 class Blindfolk
 
-	def initialize id,code
+	def initialize id,x,y,code
 
 		@id = id
 		@rules = parse(code)
@@ -8,9 +8,21 @@ class Blindfolk
 		@status = "default"
 
 		@orientation = 0
-		@x = 0
-		@y = 0
+		@x = x
+		@y = y
 
+	end
+
+	def id
+		return @id
+	end
+
+	def x
+		return @x
+	end
+
+	def y
+		return @y
 	end
 
 	def parse code
@@ -66,7 +78,7 @@ class Blindfolk
 			if @orientation == 3 then new_x += 1 ; origin = 3 end
 		end
 
-		if enemyAtLocation(new_x,new_y) then enemyAtLocation(new_x,new_y).bump(origin) else @x = new_x ; @y = new_y end
+		if enemyAtLocation(new_x,new_y) then enemyAtLocation(new_x,new_y).bump(self,origin) else @x = new_x ; @y = new_y end
 
 	end
 
@@ -91,7 +103,7 @@ class Blindfolk
 			if @orientation == 3 then new_y += 1 ; origin = 2 end
 		end
 
-		if enemyAtLocation(new_x,new_y) then enemyAtLocation(new_x,new_y).bump(origin) else @x = new_x ; @y = new_y end
+		if enemyAtLocation(new_x,new_y) then enemyAtLocation(new_x,new_y).bump(self,origin) else @x = new_x ; @y = new_y end
 
 	end
 
@@ -122,6 +134,12 @@ class Blindfolk
 
 	end
 
+	def bump player,origin
+
+		puts "Collision [#{player.id} -> #{@id}]"
+
+	end
+
 	def enemyAtLocation x,y
 
 		for player in $players
@@ -139,29 +157,24 @@ end
 
 # Make Player1
 code = "
-move.forward
-move.forward
+turn.right
+turn.right
 "
-p1 = Blindfolk.new(1,code)
+p1 = Blindfolk.new(1,0,1,code)
 
 # Make Player2
 code = "
 turn.right
 turn.right
 "
-p2 = Blindfolk.new(2,code)
+p2 = Blindfolk.new(2,1,1,code)
 
 # Make Player3
 code = "
-case hit.high
-  attack.high
-  turn.left
-case default
-  attack.high
-  turn.left
-  say hello there 
+move.forward
+move.forward
 "
-p3 = Blindfolk.new(3,code)
+p3 = Blindfolk.new(3,0,0,code)
 
 $players = [p1,p2,p3].shuffle
 
