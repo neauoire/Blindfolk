@@ -1,7 +1,13 @@
-var hash = "909";
+var token = readCookie("token");
 
 $(document).ready(function()
 {
+	if(!token){
+		var newToken = generateToken();
+		setCookie("token",newToken,100);
+		console.log("Created new player");
+	}
+
 	renderTerminal();
 
 	$('#terminal').bind('input propertychange', function(){ 
@@ -85,19 +91,13 @@ function loadDocumentation()
 
 function loadTimeline()
 {
-	console.log("Timeline Loading..");
 	$('#timeline').text("");
 
 	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.timeline.php", data: {} }).done(function( content_raw ) {
-
 		var timeline = JSON.parse(content_raw);
 		var turn = timeline[0];
 		var logs = timeline[1];
-
-		console.log(logs);
-
 		$('#timeline').html("! TURN "+turn+"\n"+logs);
-		console.log("Timeline loaded.");
 	});
 }
 
@@ -105,7 +105,7 @@ function save()
 {
 	$('#save').text('Saving..');
 
-	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.terminal.php", data: { hash:hash, script:$('#terminal').val() }}).done(function( content_raw ) {
+	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.terminal.php", data: { token:token, script:$('#terminal').val() }}).done(function( content_raw ) {
 		$('#terminal').val(content_raw);
 		$('#save').hide();
 		console.log(content_raw);
@@ -154,7 +154,35 @@ function syntaxHighlight(text)
 	return text;
 }
 
-String.prototype.replaceAll = function(search, replacement){
+String.prototype.replaceAll = function(search, replacement)
+{
     var target = this;
     return target.split(search).join(replacement);
+};
+
+function setCookie(c_name,value,exdays)
+{
+	var exdate=new Date();
+	exdate.setDate(exdate.getDate() + exdays);
+	var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+	document.cookie=c_name + "=" + c_value;
+}
+
+function readCookie(name)
+{
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
+}
+
+var generateToken = function()
+{
+	var seg1 = Math.random().toString(36).substr(2);
+	var seg2 = Math.random().toString(36).substr(2);
+    return seg1+seg2; // remove `0.`
 };

@@ -10,10 +10,10 @@ $script = str_replace("   ", "  ", $script);
 $script = str_replace("\n", "_", $script);
 $script = str_replace(" ", "+", $script);
 
-// Hash
-$hash = intval($_POST['hash']);
+// Token
+$token = intval($_POST['token']);
 
 // Pass over to Ruby
-echo `ruby api.terminal.rb $hash $script`;
+echo `ruby api.terminal.rb $token $script`;
 
 ?>

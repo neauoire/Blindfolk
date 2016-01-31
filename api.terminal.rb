@@ -8,12 +8,12 @@ require 'date'
 
 require_relative "../tools/ocean.rb"
 
-@hash = ARGV[0].to_s
+@token = ARGV[0].to_s
 @script = ARGV[1].to_s.gsub("+"," ").gsub("_","\n").to_s.strip
 
 $database = Oscean.new()
 $database.connect()
-$database.saveScript(@hash,@script)
+$database.saveScript(@token,@script)
 
 puts @script
 
