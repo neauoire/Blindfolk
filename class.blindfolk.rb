@@ -1,9 +1,9 @@
 class Blindfolk
 
-	def initialize id,x,y,code
+	def initialize id,script
 
 		@id = id
-		@rules = parse(code)
+		@rules = parse(script)
 		@stamina = 10
 		@actionIndex = 0
 		@status = "default"
@@ -11,8 +11,8 @@ class Blindfolk
 		@score = 0
 
 		@orientation = 0
-		@x = x
-		@y = y
+		@x = 0
+		@y = 0
 		@name = "Blindfolk ##{@id}"
 
 	end

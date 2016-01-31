@@ -1,4 +1,13 @@
+#!/bin/env ruby
+# encoding: utf-8
+
+begin
+
+require "mysql"
+require "json"
+
 require_relative "class.blindfolk.rb"
+require_relative "../tools/ocean.rb"
 
 $logs = {}
 
@@ -46,43 +55,28 @@ def runPhase
 		end
 	end
 
-	# Print Logs
-	$logs.each do |phase,events|
-		if events.length == 0 then next end
-		events.each do |event|
-			puts "  #{event}"
-		end
-	end
+	$database.saveLogs($logs.to_json)
 
 end
 
-# Create Players
-
-# Make Player1
-code = "
-case attack.back
-  turn.right
-case default
-  idle
-"
-p1 = Blindfolk.new(1,0,1,code)
-
-# Make Player3
-code = "
-case attack.forward
-  attack.forward
-case collide.forward
-  step.right
-  step.right
-case default
-  attack.forward
-"
-p3 = Blindfolk.new(3,0,0,code)
-
-$players = [p1,p3].shuffle
+$database = Oscean.new()
+$database.connect()
+$players = $database.players.shuffle
 
 if playersAlive > 1
 	runPhase()
 end
 
+rescue Exception
 
+	errorName = "#{$!}".downcase
+	errorLocation = "#{$@}"
+	originName = "Turn"
+	errorLocation = errorLocation
+
+	errorTip = "Please report the error to <a href='https://twitter.com/neauoire'>@neauoire</a>, or refresh the page."
+	puts "<p>Actions.api: #{errorName}</p>"
+	puts "<p style='font-size:14px'>#{errorTip}</p>"
+	puts "<p style='font-size:12px'>> #{errorLocation}</p>"
+
+end
