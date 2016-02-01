@@ -23,7 +23,7 @@ leaderboard["playersCount"] = { "alive" => 0, "total" => 0 }
 rank = 1
 @players.each do |player|
 	# Rank
-	leaderboard["players"].push([rank,player[0],player[2]])
+	leaderboard["players"].push([rank,player[0],player[2],player[3]])
 	if player[1] == @token then leaderboard["player"] = { "rank" => rank, "score" => player[2] } end
 	rank += 1
 

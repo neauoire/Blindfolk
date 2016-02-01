@@ -61,7 +61,7 @@ function loadTerminal()
 	$('#terminal').text("");
 
 	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"terminal", token:token } }).done(function( content_raw ) {
-		player = JSON.parse(content_raw);
+		var player = JSON.parse(content_raw);
 		$('#player_id').text(player.id);
 		$('#terminal').text(player.script);
 		renderTerminal();
@@ -138,14 +138,15 @@ function loadLeaderboard()
 
 	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"leaderboard", token:token } }).done(function( content_raw ) {
 		var leaderboard = JSON.parse(content_raw);
-		console.log(leaderboard);
 		$('#player_rank').html(leaderboard.player.rank);
 		$('#player_score').html(leaderboard.player.score);
 		$('#players_alive').html(leaderboard.playersCount.alive+"/"+leaderboard.playersCount.total+" Players");
 
 		var leaderboardText = "<span class='sh_rank'></span> <span class='sh_spacer'>|</span> <span class='sh_name'>Name</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Score</span>\n";
 		$.each(leaderboard.players, function( index, value ) {
-			leaderboardText += "<span class='sh_rank'>"+value[0]+"</span> <span class='sh_spacer'>|</span> <span class='sh_name'>Blindfolk #"+value[1]+"</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[2]+" kills</span>\n";
+			if( parseInt(value[2]) > 0 ){
+				leaderboardText += "<span class='sh_rank'>"+value[0]+"</span> <span class='sh_spacer'>|</span> <span class='sh_name'>Blindfolk #"+value[1]+"</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[2]+" kills</span> <span class='sh_spacer'>|</span> <span>"+(parseInt(value[3]) == 1 ? "Alive" : "")+"</span>\n";
+			}
 		});
 		$('#leaderboard').html(leaderboard.header+leaderboardText);
 
@@ -161,7 +162,7 @@ function save()
 	$('#save').text('Saving..');
 
 	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"terminal", token:token, script:$('#terminal').val() }}).done(function( content_raw ) {
-		player = JSON.parse(content_raw);
+		var player = JSON.parse(content_raw);
 		$('#terminal').val(player.script);
 		$('#save').hide();
 		renderTerminal();
@@ -202,8 +203,9 @@ function syntaxHighlight(text)
 	text = text.replaceAll("move.", "<span class='sh_action'>move</span>.");
 	text = text.replaceAll("attack.", "<span class='sh_action'>attack</span>.");
 	text = text.replaceAll("turn.", "<span class='sh_action'>turn</span>.");
-	text = text.replaceAll("charge.", "<span class='sh_action'>charge</span>.");
+	text = text.replaceAll("step.", "<span class='sh_action'>step</span>.");
 	text = text.replaceAll("say ", "<span class='sh_action'>say</span> ");
+	text = text.replaceAll("idle", "<span class='sh_action'>idle</span>");
 	// Events
 	text = text.replaceAll(" collide", " <span class='sh_event'>collide</span>");
 	text = text.replaceAll(" attack", " <span class='sh_event'>attack</span>");
@@ -242,7 +244,6 @@ setInterval(function()
 
 	// Refresh when day is over
 	if(secondsUntilNextDay == 859){
-		console.log("Refreshed..");
 		loadTerminal()
 		loadTimeline();
 		$('#tab_timeline').addClass('notification');

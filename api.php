@@ -1,5 +1,7 @@
 <?php
 
+header("Cache-Control: no-cache,no-store");
+
 $route = preg_replace("/[^A-Za-z0-9]/", '', $_POST['route']);
 
 // Script
@@ -14,7 +16,7 @@ if( $_POST['script'] ){
 
 // Token
 if( $_POST['token'] ){
-	$token = preg_replace("/[^A-Za-z0-9.\n ]/", '', $_POST['token']);
+	$token = preg_replace("/[^A-Za-z0-9]/", '', $_POST['token']);
 }
 
 // Routing

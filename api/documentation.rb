@@ -25,7 +25,7 @@ Cases are triggers that will act upon the Blindfolk's action.
 
 documentation['cases'] = [
     'attack'  => { 'methods' => ['forward','backward'], 'docs' => 'Triggers when another players attack you.<br />* May be used without method and will trigger upon any incoming attack.' },
-    'collide'    => { 'methods' => ['front','back','left','right'], 'docs' => 'Triggers when you attempt to move on another player\'s position.<br />* May be used without method and will trigger upon any collision.' },
+    'collide'    => { 'methods' => ['forward','backward','left','right'], 'docs' => 'Triggers when you attempt to move on another player\'s position.<br />* May be used without method and will trigger upon any collision.' },
     'kill'    => { 'methods' => [], 'docs' => 'Triggers when you kill someone, used for taunting.' },
     'default'    => { 'methods' => [], 'docs' => 'Triggers on every normal turn, loops.' }
 ]

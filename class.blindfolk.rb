@@ -181,8 +181,6 @@ class Blindfolk
 			if @stamina > 0
 				kill(target)
 			end
-		else
-			log("Missed")
 		end
 
 	end
@@ -228,7 +226,7 @@ class Blindfolk
 		if enemy.x == @x && enemy.y == @y + 1
 			if @orientation == 0 then caseOrientation = "forward" end
 			if @orientation == 1 then caseOrientation = "left" end
-			if @orientation == 2 then caseOrientation = "back" end
+			if @orientation == 2 then caseOrientation = "backward" end
 			if @orientation == 3 then caseOrientation = "right" end
 		end
 
@@ -237,12 +235,12 @@ class Blindfolk
 			if @orientation == 0 then caseOrientation = "right" end
 			if @orientation == 1 then caseOrientation = "forward" end
 			if @orientation == 2 then caseOrientation = "left" end
-			if @orientation == 3 then caseOrientation = "back" end
+			if @orientation == 3 then caseOrientation = "backward" end
 		end
 
 		# South
 		if enemy.x == @x && enemy.y == @y - 1
-			if @orientation == 0 then caseOrientation = "back" end
+			if @orientation == 0 then caseOrientation = "backward" end
 			if @orientation == 1 then caseOrientation = "right" end
 			if @orientation == 2 then caseOrientation = "forward" end
 			if @orientation == 3 then caseOrientation = "left" end
@@ -251,7 +249,7 @@ class Blindfolk
 		# West
 		if enemy.x == @x - 1 && enemy.y == @y
 			if @orientation == 0 then caseOrientation = "left" end
-			if @orientation == 1 then caseOrientation = "back" end
+			if @orientation == 1 then caseOrientation = "backward" end
 			if @orientation == 2 then caseOrientation = "right" end
 			if @orientation == 3 then caseOrientation = "forward" end
 		end
