@@ -10,12 +10,12 @@ body { background:#111;}
 .status a:hover { color:#777; cursor: pointer}
 .status #tab_render #save { color: #111;background: #ffe7a5;line-height: 20px;display: none;padding: 0px 4px;border-radius: 2px;}
 .status #tab_render #save:hover { background:#fff;}
+.status #tab_leaderboard { float:right;}
 
 .entry { display: block;unicode-bidi: embed;white-space: pre;padding:15px;width:calc(100vw - 30px - 175px);min-width:calc(100vw - 30px - 175px);height:calc(100vh - 75px);max-height:calc(100vh - 65px);position: absolute; top:45px; left:175px;border:0px; line-height: 20px; font-size:12px; overflow: hidden}
 .entry#terminal { background: transparent; z-index:9000; color:rgba(0,0,0,0); resize: none;}
-.entry#render { background: #222; color:#999; z-index:0; resize: none;}
-.entry#timeline { background: #222; color:#999; z-index:0; resize: none; display: none}
-.entry#documentation { background: #222; color:#999; z-index:0; resize: none; display: none}
+.entry#render, .entry#timeline, .entry#documentation, .entry#leaderboard { background: #222; color:#999; z-index:0; resize: none; }
+.entry#timeline, .entry#documentation, .entry#leaderboard { display: none }
 
 /* Terminal */
 .sh_case { color:#666; background:#000;}
@@ -37,3 +37,10 @@ riposte { display: inline-block; padding-left:15px; line-height: 0px}
 .options .logo svg { overflow: visible;}
 .options .logo svg * { stroke:white;stroke-width:1 }
 .options .player,.options .server { margin-bottom: 30px}
+
+#player_respawn { cursor: pointer; color:#ffe7a5; text-decoration: underline;}
+
+
+
+
+

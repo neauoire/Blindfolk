@@ -70,6 +70,8 @@ class Blindfolk
 		if @stamina < 1 then return end
 		if @isAlive == 0 then return end
 
+		if !@rules[@status] then @rules[@status] = ["idle"] end
+
 		actionIndexClamped = @actionIndex % @rules[@status].length
 		command = @rules[@status][actionIndexClamped]
 

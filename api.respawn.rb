@@ -13,25 +13,7 @@ require_relative "../tools/ocean.rb"
 $database = Oscean.new()
 $database.connect()
 
-@players = $database.leaderboard()
-
-leaderboard = {}
-leaderboard["players"] = []
-leaderboard["playersCount"] = { "alive" => 0, "total" => 0 }
-
-rank = 1
-@players.each do |player|
-	# Rank
-	leaderboard["players"].push([rank,player[0],player[2]])
-	if player[1] == @token then leaderboard["player"] = { "rank" => rank, "score" => player[2] } end
-	rank += 1
-
-	# Count
-	if player[3] == 1 then leaderboard["playersCount"]["alive"] += 1 end
-	leaderboard["playersCount"]["total"] += 1
-end
-
-puts leaderboard.to_json
+$database.respawn(@token)
 
 rescue Exception
 

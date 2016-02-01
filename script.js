@@ -6,7 +6,6 @@ $(document).ready(function()
 	if(!token){
 		token = generateToken();
 		setCookie("token",token,100);
-		console.log("Created new player");
 	}
 
 	$('#terminal').bind('input propertychange', function(){ 
@@ -19,30 +18,42 @@ $(document).ready(function()
 		save();
 	});
 
+	$('#player_respawn').bind( "click", function() { 
+		respawn();
+	});
+
 	// Bind Tabs
 
 	$('#tab_render').bind( "click", function() { 
 		$('#terminal').show();
-		$('#render').show(); $('#timeline').hide(); $('#documentation').hide(); 
-		$('#tab_render').attr('class','active'); $('#tab_timeline').attr('class',''); $('#tab_documentation').attr('class',''); 
+		$('#render').show(); $('#timeline').hide(); $('#documentation').hide();  $('#leaderboard').hide(); 
+		$('#tab_render').attr('class','active'); $('#tab_timeline').attr('class',''); $('#tab_documentation').attr('class',''); $('#tab_leaderboard').attr('class','');
 	});
 	$('#tab_timeline').bind( "click", function() { 
 		$('#terminal').hide();
-		$('#render').hide(); $('#timeline').show(); $('#documentation').hide(); 
-		$('#tab_render').attr('class',''); $('#tab_timeline').attr('class','active'); $('#tab_documentation').attr('class',''); 
+		$('#render').hide(); $('#timeline').show(); $('#documentation').hide();  $('#leaderboard').hide(); 
+		$('#tab_render').attr('class',''); $('#tab_timeline').attr('class','active'); $('#tab_documentation').attr('class',''); $('#tab_leaderboard').attr('class','');
 	});
 	$('#tab_documentation').bind( "click", function() { 
 		$('#terminal').hide();
-		$('#render').hide(); $('#timeline').hide(); $('#documentation').show(); 
-		$('#tab_render').attr('class',''); $('#tab_timeline').attr('class',''); $('#tab_documentation').attr('class','active'); 
+		$('#render').hide(); $('#timeline').hide(); $('#documentation').show();  $('#leaderboard').hide(); 
+		$('#tab_render').attr('class',''); $('#tab_timeline').attr('class',''); $('#tab_documentation').attr('class','active'); $('#tab_leaderboard').attr('class',''); 
+	});
+	$('#tab_leaderboard').bind( "click", function() { 
+		$('#terminal').hide();
+		$('#render').hide(); $('#timeline').hide(); $('#documentation').hide(); $('#leaderboard').show(); 
+		$('#tab_render').attr('class',''); $('#tab_timeline').attr('class',''); $('#tab_documentation').attr('class',''); $('#tab_leaderboard').attr('class','active'); 
 	});
 
 	loadTerminal();
 	loadDocumentation();
 	loadTimeline();
-
-	console.log(countdown());
+	loadLeaderboard();
 });
+
+/* ===========================
+>  API Connections
+=========================== */
 
 function loadTerminal()
 {
@@ -52,10 +63,17 @@ function loadTerminal()
 		player = JSON.parse(content_raw);
 		$('#player_id').text(player.id);
 		$('#terminal').text(player.script);
-		console.log(player);
 		renderTerminal();
-	});
 
+		if(player.isAlive == 0){
+			$('#player_status').html("Dead.");
+			$('#player_respawn').css("display","inline");
+		}
+		else{
+			$('#player_status').html("Alive.");
+			$('#player_respawn').css("display","none");
+		}
+	});
 }
 
 function loadDocumentation()
@@ -118,6 +136,30 @@ function loadTimeline()
 	});
 }
 
+function loadLeaderboard()
+{
+	$('#leaderboard').text("");
+
+	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.leaderboard.php", data: { token:token } }).done(function( content_raw ) {
+		var leaderboard = JSON.parse(content_raw);
+		console.log(leaderboard);
+		$('#player_rank').html(leaderboard.player.rank);
+		$('#player_score').html(leaderboard.player.score);
+		$('#players_alive').html(leaderboard.playersCount.alive+"/"+leaderboard.playersCount.total+" Players");
+
+		var leaderboardText = "";
+		$.each(leaderboard.players, function( index, value ) {
+			leaderboardText += "Rank "+value[0]+" Blindfolk #"+value[1]+" Score "+value[2]+"\n";
+		});
+		$('#leaderboard').html(leaderboardText);
+
+	});
+}
+
+/* ===========================
+>  Player Actions
+=========================== */
+
 function save()
 {
 	$('#save').text('Saving..');
@@ -129,6 +171,17 @@ function save()
 		renderTerminal();
 	});
 }
+
+function respawn()
+{
+	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.respawn.php", data: { token:token }}).done(function( content_raw ) {
+		loadTerminal();
+	});
+}
+
+/* ===========================
+>  Syntax Parsing
+=========================== */
 
 function renderTerminal()
 {
@@ -163,6 +216,7 @@ function syntaxHighlight(text)
 	text = text.replaceAll(".high", ".<span class='sh_method'>high</span>");
 	text = text.replaceAll(".low", ".<span class='sh_method'>low</span>");
 	text = text.replaceAll(".forward", ".<span class='sh_method'>forward</span>");
+	text = text.replaceAll(".backward", ".<span class='sh_method'>backward</span>");
 	text = text.replaceAll(".back", ".<span class='sh_method'>back</span>");
 	text = text.replaceAll(".right", ".<span class='sh_method'>right</span>");
 	text = text.replaceAll(".left", ".<span class='sh_method'>left</span>");
@@ -170,6 +224,10 @@ function syntaxHighlight(text)
 	text = text.replaceAll("  ", "<span class='sh_indent'>> </span>");
 	return text;
 }
+
+/* ===========================
+>  Counters
+=========================== */
 
 setInterval(function()
 {
@@ -183,8 +241,18 @@ setInterval(function()
 	else{
 		$('#until_next_day').text((secondsUntilNextDay % 60)+" Seconds left");
 	}
-	
+
+	// Refresh when day is over
+	if(secondsUntilNextDay == 0){
+		console.log("Refreshed..");
+		loadTerminal()
+		loadTimeline();
+	}
 }, 1000);
+
+/* ===========================
+>  Tools
+=========================== */
 
 String.prototype.replaceAll = function(search, replacement)
 {
@@ -196,27 +264,4 @@ function setCookie(c_name,value,exdays)
 {
 	var exdate=new Date();
 	exdate.setDate(exdate.getDate() + exdays);
-	var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
-	document.cookie=c_name + "=" + c_value;
-}
-
-function readCookie(name)
-{
-	var nameEQ = name + "=";
-	var ca = document.cookie.split(';');
-	for(var i=0;i < ca.length;i++) {
-		var c = ca[i];
-		while (c.charAt(0)==' ') c = c.substring(1,c.length);
-		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-	}
-	return null;
-}
-
-function countdown()
-{
-	time = new Date()
-	return (time.getMinutes() * 60) + time.getSeconds(); 
-}
-
-function generateToken()
-{
+	var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.to

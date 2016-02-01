@@ -10,6 +10,7 @@
     <a id='tab_render' class='active'># Fighting Style <span id='save'>save</span></a>
     <a id='tab_timeline'># Turn 391</a>
     <a id='tab_documentation'># Documentation</a>
+    <a id='tab_leaderboard'># Leaderboard</a>
     </div>
 
     <div class='options'>
@@ -25,11 +26,12 @@
       </a>
       <ul class='player'>
         <li><strong>Blindfolk</strong>(<a href='' id='player_id'></a>)</li>
-        <li>Rank <i id='player_rank'>1,302</i></li>
+        <li>Rank <i id='player_rank'>-</i> Score <i id='player_score'>-</i></li>
+        <li><span id='player_status'>Ready.</span> <span id='player_respawn'>Respawn</span></li>
       </ul>
       <ul class='server'>
         <li>Next <i id='next_day'>Day</i></li>
-        <li id='until_next_day'>9 Minutes Left</li>
+        <li id='until_next_day'>Calculating..</li>
         <li id='players_alive'>14 Players</li>
       </ul>
     </div>
@@ -37,4 +39,8 @@
     <textarea class='entry' id='terminal'></textarea>
     <div class='entry' id='render'></div>
     <div class='entry' id='timeline'></div>
-    <di
+    <div class='entry' id='documentation'></div>
+    <div class='entry' id='leaderboard'></div>
+
+  </body>
+</html>

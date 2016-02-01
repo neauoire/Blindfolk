@@ -9,6 +9,9 @@ require "json"
 require_relative "class.blindfolk.rb"
 require_relative "../tools/ocean.rb"
 
+$database = Oscean.new()
+$database.connect()
+
 $logs = {}
 
 def log event
@@ -33,12 +36,13 @@ def runPhase
 
 	$phase = 1
 	while $phase <= 10
-		log("\n<phase># Phase #{$phase}</phase>\n")
+		log("<phase># Phase #{$phase}</phase>\n")
 		for player in $players
 			player.act()
 		end
 		if playersAlive == 1 then break end
 		$phase += 1
+		log("\n")
 	end
 
 	log("\n<phase># Game Over</phase>\n")
@@ -46,6 +50,7 @@ def runPhase
 	# Save scores
 	for player in $players
 		log("#{player.name} gains <score>#{player.score} point</score>.")
+		$database.updatePlayer(player)
 	end
 
 	# Last blindfolk standing
@@ -67,8 +72,6 @@ def runPhase
 
 end
 
-$database = Oscean.new()
-$database.connect()
 $players = $database.players.shuffle
 
 if playersAlive > 1
@@ -85,6 +88,4 @@ rescue Exception
 	errorTip = "Please report the error to <a href='https://twitter.com/neauoire'>@neauoire</a>, or refresh the page."
 	puts "<p>Actions.api: #{errorName}</p>"
 	puts "<p style='font-size:14px'>#{errorTip}</p>"
-	puts "<p style='font-size:12px'>> #{errorLocation}</p>"
-
-end
+	puts "<p style='font-size:12px'>> #{errorLocatio
