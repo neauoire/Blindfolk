@@ -30,6 +30,7 @@ $(document).ready(function()
 		$('#tab_render').attr('class','active'); $('#tab_timeline').attr('class',''); $('#tab_documentation').attr('class',''); $('#tab_leaderboard').attr('class','');
 	});
 	$('#tab_timeline').bind( "click", function() { 
+		$('#tab_timeline').removeClass('notification');
 		$('#terminal').hide();
 		$('#render').hide(); $('#timeline').show(); $('#documentation').hide();  $('#leaderboard').hide(); 
 		$('#tab_render').attr('class',''); $('#tab_timeline').attr('class','active'); $('#tab_documentation').attr('class',''); $('#tab_leaderboard').attr('class','');
@@ -59,7 +60,7 @@ function loadTerminal()
 {
 	$('#terminal').text("");
 
-	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.terminal.php", data: { token:token } }).done(function( content_raw ) {
+	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"terminal", token:token } }).done(function( content_raw ) {
 		player = JSON.parse(content_raw);
 		$('#player_id').text(player.id);
 		$('#terminal').text(player.script);
@@ -80,7 +81,7 @@ function loadDocumentation()
 {
 	$('#documentation').text("");
 
-	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.documentation.php", data: {} }).done(function( content_raw ) {
+	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"documentation" } }).done(function( content_raw ) {
 
 		var documentation = JSON.parse(content_raw);
 		var documentationText = "";
@@ -126,7 +127,7 @@ function loadTimeline()
 {
 	$('#timeline').text("");
 
-	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.timeline.php", data: {} }).done(function( content_raw ) {
+	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"timeline" } }).done(function( content_raw ) {
 		var timeline = JSON.parse(content_raw);
 		var day = timeline[0];
 		var logs = timeline[1];
@@ -140,7 +141,7 @@ function loadLeaderboard()
 {
 	$('#leaderboard').text("");
 
-	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.leaderboard.php", data: { token:token } }).done(function( content_raw ) {
+	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"leaderboard", token:token } }).done(function( content_raw ) {
 		var leaderboard = JSON.parse(content_raw);
 		console.log(leaderboard);
 		$('#player_rank').html(leaderboard.player.rank);
@@ -164,7 +165,7 @@ function save()
 {
 	$('#save').text('Saving..');
 
-	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.terminal.php", data: { token:token, script:$('#terminal').val() }}).done(function( content_raw ) {
+	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"terminal", token:token, script:$('#terminal').val() }}).done(function( content_raw ) {
 		player = JSON.parse(content_raw);
 		$('#terminal').val(player.script);
 		$('#save').hide();
@@ -174,7 +175,7 @@ function save()
 
 function respawn()
 {
-	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.respawn.php", data: { token:token }}).done(function( content_raw ) {
+	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"respawn", token:token }}).done(function( content_raw ) {
 		loadTerminal();
 		loadLeaderboard();
 	});
@@ -245,10 +246,11 @@ setInterval(function()
 	}
 
 	// Refresh when day is over
-	if(secondsUntilNextDay == 0){
+	if(secondsUntilNextDay == 859){
 		console.log("Refreshed..");
 		loadTerminal()
 		loadTimeline();
+		$('#tab_timeline').addClass('notification');
 	}
 }, 1000);
 

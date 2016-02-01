@@ -7,9 +7,19 @@ require 'json'
 
 documentation = {}
 
-documentation['introduction'] = "Missing documentation for introduction."
+documentation['introduction'] = "Blindfolk is a multiplayer game that involves programming a fighting style.
+Every 15 minutes, if more than 2 fighters are alive, a turn occurs.
+Blindfolks will keep on fighting as long as they are alive."
 
-documentation['fighting'] = ["Missing documentation for fighting styles."]
+documentation['fighting'] = ["A fighting style is a series of cases and actions.
+Cases are triggers that will act upon the Blindfolk's action.
+
+<span class='sh_case'>case</span> <span class='sh_event'>attack</span>.<span class='sh_method'>backward</span>
+
+<span class='sh_indent'>></span> <span class='sh_action'>step</span>.<span class='sh_method'>right</span>
+<span class='sh_indent'>></span> <span class='sh_action'>move</span>.<span class='sh_method'>backward</span>
+<span class='sh_indent'>></span> <span class='sh_action'>turn</span>.<span class='sh_method'>left</span>
+<span class='sh_indent'>></span> <span class='sh_action'>attack</span>.<span class='sh_method'>forward</span>"]
 
 documentation['cases'] = [
     'attack'  => { 'methods' => ['forward','backward'], 'docs' => 'Missing data' },

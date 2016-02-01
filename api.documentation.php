@@ -1,1 +1,0 @@
-<?php echo `ruby api.documentation.rb`; ?>
