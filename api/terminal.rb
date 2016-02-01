@@ -6,7 +6,7 @@ begin
 require 'mysql'
 require 'json'
 
-require_relative "../tools/ocean.rb"
+require_relative "../../tools/ocean.rb"
 
 @token = ARGV[0].to_s
 @script = ARGV[1].to_s.gsub("+"," ").gsub("_","\n").to_s.strip

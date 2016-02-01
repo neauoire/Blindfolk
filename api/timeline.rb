@@ -6,8 +6,8 @@ begin
 require "mysql"
 require "json"
 
-require_relative "class.blindfolk.rb"
-require_relative "../tools/ocean.rb"
+require_relative "../class.blindfolk.rb"
+require_relative "../../tools/ocean.rb"
 
 $database = Oscean.new()
 $database.connect()

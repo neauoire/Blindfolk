@@ -19,19 +19,19 @@ if( $_POST['token'] ){
 
 // Routing
 if( $_POST['route'] == "respawn" ){
-	echo `ruby api.respawn.rb $token`;
+	echo `ruby api/respawn.rb $token`;
 }
 else if( $_POST['route'] == "leaderboard" ){
-	echo `ruby api.leaderboard.rb $token`;
+	echo `ruby api/leaderboard.rb $token`;
 }
 else if( $_POST['route'] == "documentation" ){
-	echo `ruby api.documentation.rb`;
+	echo `ruby api/documentation.rb`;
 }
 else if( $_POST['route'] == "timeline" ){
-	echo `ruby api.timeline.rb`;
+	echo `ruby api/timeline.rb`;
 }
 else if( $_POST['route'] == "terminal" ){
-	echo `ruby api.terminal.rb $token $script`;
+	echo `ruby api/terminal.rb $token $script`;
 }
 else{
 	echo "Route Unavailable.";

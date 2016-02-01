@@ -6,7 +6,7 @@ begin
 require 'mysql'
 require 'json'
 
-require_relative "../tools/ocean.rb"
+require_relative "../../tools/ocean.rb"
 
 @token = ARGV[0].to_s
 
