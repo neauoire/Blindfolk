@@ -284,19 +284,19 @@ class Blindfolk
 
 		if @orientation == 0
 			if enemy.x == @x && enemy.y == @y + 1 then caseOrientation = "forward" end
-			if enemy.x == @x && enemy.y == @y - 1 then caseOrientation = "back" end
+			if enemy.x == @x && enemy.y == @y - 1 then caseOrientation = "backward" end
 		end
 		if @orientation == 1
 			if enemy.x == @x + 1 && enemy.y == @y then caseOrientation = "forward" end
-			if enemy.x == @x - 1 && enemy.y == @y then caseOrientation = "back" end
+			if enemy.x == @x - 1 && enemy.y == @y then caseOrientation = "backward" end
 		end
 		if @orientation == 2
 			if enemy.x == @x && enemy.y == @y - 1 then caseOrientation = "forward" end
-			if enemy.x == @x && enemy.y == @y + 1 then caseOrientation = "back" end
+			if enemy.x == @x && enemy.y == @y + 1 then caseOrientation = "backward" end
 		end
 		if @orientation == 3
 			if enemy.x == @x - 1 && enemy.y == @y then caseOrientation = "forward" end
-			if enemy.x == @x + 1 && enemy.y == @y then caseOrientation = "back" end
+			if enemy.x == @x + 1 && enemy.y == @y then caseOrientation = "backward" end
 		end
 
 		# Riposte
