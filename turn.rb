@@ -45,7 +45,7 @@ def runPhase
 		log("\n")
 	end
 
-	log("\n<phase># Game Over</phase>\n")
+	log("<phase># Game Over</phase>\n")
 
 	# Save scores
 	for player in $players
@@ -84,14 +84,7 @@ p $logs
 
 rescue Exception
 
-	errorName = "#{$!}".downcase
-	errorLocation = "#{$@}"
-	originName = "Turn"
-	errorLocation = errorLocation
-
-	errorTip = "Please report the error to <a href='https://twitter.com/neauoire'>@neauoire</a>, or refresh the page."
-	puts "<p>Actions.api: #{errorName}</p>"
-	puts "<p style='font-size:14px'>#{errorTip}</p>"
-	puts "<p style='font-size:12px'>> #{errorLocation}</p>"
+	puts "<p>#{$!}</p>"
+	puts "<p>#{$@}</p>"
 
 end

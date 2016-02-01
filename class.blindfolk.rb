@@ -258,9 +258,8 @@ class Blindfolk
 
 		# Riposte
 
-		log("<riposte>")
 		if @rules["collide.#{caseOrientation}"]
-			log("#{@name} [combo].")
+			log("#{@name} counters!")
 			@status = "collide.#{caseOrientation}"
 			@actionIndex = 0
 			for riposte in @rules["collide.#{caseOrientation}"]
@@ -268,10 +267,16 @@ class Blindfolk
 			end
 			@status = "default"
 			@actionIndex = 0
-		else
-			log("#{@name} idle.")
+		elsif @rules["collide"]
+			log("#{@name} counters!")
+			@status = "collide"
+			@actionIndex = 0
+			for riposte in @rules["collide"]
+				self.act()
+			end
+			@status = "default"
+			@actionIndex = 0
 		end
-		log("</riposte>")
 
 	end
 
@@ -297,9 +302,8 @@ class Blindfolk
 		end
 
 		# Riposte
-		log("<riposte>")
 		if @rules["attack.#{caseOrientation}"]
-			log("#{@name} [riposte].")
+			log("#{@name} counters!")
 			@status = "attack.#{caseOrientation}"
 			@actionIndex = 0
 			for riposte in @rules["attack.#{caseOrientation}"]
@@ -307,10 +311,16 @@ class Blindfolk
 			end
 			@status = "default"
 			@actionIndex = 0
-		else
-			log("#{@name} idles.")			
+		elsif @rules["attack"]
+			log("#{@name} counters!")
+			@status = "attack"
+			@actionIndex = 0
+			for riposte in @rules["attack"]
+				self.act()
+			end
+			@status = "default"
+			@actionIndex = 0		
 		end
-		log("</riposte>")
 
 	end
 
@@ -327,7 +337,6 @@ class Blindfolk
 	def die
 
 		@isAlive = 0
-		log("#{@name} dies.")
 
 	end
 

@@ -86,37 +86,32 @@ function loadDocumentation()
 		var documentation = JSON.parse(content_raw);
 		var documentationText = "";
 
-		documentationText += "# Introduction\n\n";
+		documentationText += "<phase># Introduction</phase>\n\n";
 		documentationText += documentation["introduction"]+"\n\n";
-		documentationText += "# Fighting Styles\n\n";
+		documentationText += "<phase># Fighting Styles</phase>\n\n";
 		documentationText += documentation["fighting"]+"\n\n";
 
 		// Cases
-		documentationText += "# Cases Documentation\n\n";
+		documentationText += "<phase># Cases Documentation</phase>\n\n";
 		$.each(documentation["cases"][0], function( _case, value ) {
 			documentationText += "<span class='sh_case'>case</span> <span class='sh_event'>"+_case+"</span> ";
-			documentationText += "[ ";
-			$.each(value['methods'], function( index, _method ) {
-				documentationText += ".<span class='sh_method'>"+_method+"</span> ";
-			});
-			documentationText += "]\n";
-			documentationText += "<span class=''>"+value["docs"]+"</span>\n\n";
+			if(value['methods'].length > 0){
+				documentationText += "[ "; $.each(value['methods'], function( index, _method ) { documentationText += ".<span class='sh_method'>"+_method+"</span> "; }); documentationText += "]";
+			}
+			documentationText += "\n<span class=''>"+value["docs"]+"</span>\n\n";
 		});
 
 		// Actions
-		documentationText += "# Actions Documentation\n\n";
+		documentationText += "<phase># Actions Documentation</phase>\n\n";
 		$.each(documentation["actions"][0], function( _case, value ) {
 			documentationText += "<span class='sh_indent'>></span> <span class='sh_event'>"+_case+"</span> ";
-			// Methods
-			documentationText += "[ ";
-			$.each(value['methods'], function( index, _method ) {
-				documentationText += ".<span class='sh_method'>"+_method+"</span> ";
-			});
-			documentationText += "]\n";
-			documentationText += "<span class=''>"+value["docs"]+"</span>\n\n";
+			if(value['methods'].length > 0){
+				documentationText += "[ "; $.each(value['methods'], function( index, _method ) { documentationText += ".<span class='sh_method'>"+_method+"</span> "; }); documentationText += "]";
+			}
+			documentationText += "\n<span class=''>"+value["docs"]+"</span>\n\n";
 		});
 
-		documentationText += "# Exit\n\n";
+		documentationText += "<phase># Exit</phase>\n\n";
 		documentationText += documentation["credits"]+"\n\n";
 
 		$('#documentation').html(documentationText);
@@ -148,11 +143,11 @@ function loadLeaderboard()
 		$('#player_score').html(leaderboard.player.score);
 		$('#players_alive').html(leaderboard.playersCount.alive+"/"+leaderboard.playersCount.total+" Players");
 
-		var leaderboardText = "";
+		var leaderboardText = "<span class='sh_rank'></span> <span class='sh_spacer'>|</span> <span class='sh_name'>Name</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Score</span>\n";
 		$.each(leaderboard.players, function( index, value ) {
-			leaderboardText += "Rank "+value[0]+" Blindfolk #"+value[1]+" Score "+value[2]+"\n";
+			leaderboardText += "<span class='sh_rank'>"+value[0]+"</span> <span class='sh_spacer'>|</span> <span class='sh_name'>Blindfolk #"+value[1]+"</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[2]+" kills</span>\n";
 		});
-		$('#leaderboard').html(leaderboardText);
+		$('#leaderboard').html(leaderboard.header+leaderboardText);
 
 	});
 }
@@ -189,7 +184,7 @@ function renderTerminal()
 {
 	var text = syntaxHighlight($('#terminal').val());
 	$('#render').html(text+"_");
-	$('#memory').text(((($('#terminal').val().length/400)*100).toFixed(1))+"%");
+	$('#memory').text(((($('#terminal').val().length/500)*100).toFixed(1))+"%");
 }
 
 function renderTimeline()

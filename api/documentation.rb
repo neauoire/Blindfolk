@@ -9,7 +9,9 @@ documentation = {}
 
 documentation['introduction'] = "Blindfolk is a multiplayer game that involves programming a fighting style.
 Every 15 minutes, if more than 2 fighters are alive, a turn occurs.
-Blindfolks will keep on fighting as long as they are alive."
+Blindfolks will keep on fighting as long as they are alive.
+
+Begin by pressing RESPAWN on the left menu."
 
 documentation['fighting'] = ["A fighting style is a series of cases and actions.
 Cases are triggers that will act upon the Blindfolk's action.
@@ -22,37 +24,28 @@ Cases are triggers that will act upon the Blindfolk's action.
 <span class='sh_indent'>></span> <span class='sh_action'>attack</span>.<span class='sh_method'>forward</span>"]
 
 documentation['cases'] = [
-    'attack'  => { 'methods' => ['forward','backward'], 'docs' => 'Missing data' },
-    'collide'    => { 'methods' => ['front','back','left','right'], 'docs' => 'Missing data' },
-    'death'    => { 'methods' => [], 'docs' => 'Missing data' },
-    'kill'    => { 'methods' => [], 'docs' => 'Missing data' },
-    'default'    => { 'methods' => [], 'docs' => 'Missing data' }
+    'attack'  => { 'methods' => ['forward','backward'], 'docs' => 'Triggers when another players attack you.<br />* May be used without method and will trigger upon any incoming attack.' },
+    'collide'    => { 'methods' => ['front','back','left','right'], 'docs' => 'Triggers when you attempt to move on another player\'s position.<br />* May be used without method and will trigger upon any collision.' },
+    'kill'    => { 'methods' => [], 'docs' => 'Triggers when you kill someone, used for taunting.' },
+    'default'    => { 'methods' => [], 'docs' => 'Triggers on every normal turn, loops.' }
 ]
 
 documentation['actions'] = [
-    'move'    => { 'methods' => ['forward','backward'], 'docs' => 'Missing data' },
-    'step'    => { 'methods' => ['left','right'], 'docs' => 'Missing data' },
-    'turn'  => { 'methods' => ['left','right'], 'docs' => 'Missing data' },
-    'attack'    => { 'methods' => ['forward','backward'], 'docs' => 'Missing data' },
-    'say'    => { 'methods' => [], 'docs' => 'Missing data' }
+    'move'    => { 'methods' => ['forward','backward'], 'docs' => 'Move toward the method direction.' },
+    'step'    => { 'methods' => ['left','right'], 'docs' => 'Sidestep toward the method direction.' },
+    'turn'  => { 'methods' => ['left','right'], 'docs' => 'Turn anti-clockwise or clockwise.' },
+    'attack'    => { 'methods' => ['forward','backward'], 'docs' => 'Attack toward the method direction.' },
+    'say'    => { 'methods' => [], 'docs' => 'Writes a string of text under 40 characters, to the timeline.' },
+    'idle'    => { 'methods' => [], 'docs' => 'Do nothing for a turn.' }
 ]
 
-documentation['examples'] = ["example1","example2"]
-
-documentation['credits'] = ["Missing documentation for credits."]
+documentation['credits'] = ["This project was created by <a href='http://wiki.xxiivv.com/blind' target='_blank'>Devine Lu Linvega</a>. <br />The sources are available on <a href='https://github.com/XXIIVV/Blind' target='_blank'>Github</a>. <br />Community <a href='https://twitter.com/search?q=%23blindfolk' target='_blank'>#blindfolk</a>"]
 
 puts documentation.to_json
 
 rescue Exception
 
-	errorName = "#{$!}".downcase
-	errorLocation = "#{$@}"
-	originName = "Actions API"
-	errorLocation = errorLocation
-
-	errorTip = "Please report the error to <a href='https://twitter.com/neauoire'>@neauoire</a>, or refresh the page."
-	puts "<p>Actions.api: #{errorName}</p>"
-	puts "<p style='font-size:14px'>#{errorTip}</p>"
-	puts "<p style='font-size:12px'>> #{errorLocation}</p>"
+    puts "<p>#{$!}</p>"
+    puts "<p>#{$@}</p>"
 
 end

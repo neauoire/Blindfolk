@@ -27,6 +27,7 @@ body { background:#111;}
 .entry#terminal { background: transparent; z-index:9000; color:rgba(0,0,0,0); resize: none; overflow: hidden}
 .entry#render, .entry#timeline, .entry#documentation, .entry#leaderboard { background: #222; color:#999; z-index:0; resize: none; }
 .entry#timeline, .entry#documentation, .entry#leaderboard { display: none }
+.entry a { color:white; text-decoration: underline;}
 
 /* Terminal */
 .sh_case { color:#666; background:#000;}
@@ -34,6 +35,10 @@ body { background:#111;}
 .sh_indent { color:#444;}
 .sh_event { color:#fff; display:inline-block; border-bottom: 1px solid #444; line-height: 12px}
 .sh_method { color:#ffe7a5;}
+.sh_rank { display: inline-block; width:30px;}
+.sh_name { display: inline-block; width:100px;}
+.sh_score { display: inline-block; width:50px;}
+.sh_spacer { display: inline-block; width:15px; color:#333;}
 /* Timeline */
 blindfolk { display:inline; color:#ffe7a5; }
 phase { display:inline; color:#555; }
@@ -50,8 +55,4 @@ riposte { display: inline-block; padding-left:15px; line-height: 0px}
 .options .player,.options .server { margin-bottom: 30px}
 
 #player_respawn { cursor: pointer; color:#ffe7a5; text-decoration: underline;}
-
-
-
-
 
