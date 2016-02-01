@@ -76,7 +76,11 @@ $players = $database.players.shuffle
 
 if playersAlive > 1
 	runPhase()
+else
+	puts "Missing players"
 end
+
+p $logs
 
 rescue Exception
 
@@ -88,4 +92,6 @@ rescue Exception
 	errorTip = "Please report the error to <a href='https://twitter.com/neauoire'>@neauoire</a>, or refresh the page."
 	puts "<p>Actions.api: #{errorName}</p>"
 	puts "<p style='font-size:14px'>#{errorTip}</p>"
-	puts "<p style='font-size:12px'>> #{errorLocatio
+	puts "<p style='font-size:12px'>> #{errorLocation}</p>"
+
+end

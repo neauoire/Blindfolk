@@ -12,8 +12,8 @@ body { background:#111;}
 .status #tab_render #save:hover { background:#fff;}
 .status #tab_leaderboard { float:right;}
 
-.entry { display: block;unicode-bidi: embed;white-space: pre;padding:15px;width:calc(100vw - 30px - 175px);min-width:calc(100vw - 30px - 175px);height:calc(100vh - 75px);max-height:calc(100vh - 65px);position: absolute; top:45px; left:175px;border:0px; line-height: 20px; font-size:12px; overflow: hidden}
-.entry#terminal { background: transparent; z-index:9000; color:rgba(0,0,0,0); resize: none;}
+.entry { display: block;unicode-bidi: embed;white-space: pre;padding:15px;width:calc(100vw - 30px - 175px);min-width:calc(100vw - 30px - 175px);height:calc(100vh - 75px);max-height:calc(100vh - 65px);position: absolute; top:45px; left:175px;border:0px; line-height: 20px; font-size:12px; overflow-y: scroll; overflow-x: hidden }
+.entry#terminal { background: transparent; z-index:9000; color:rgba(0,0,0,0); resize: none; overflow: hidden}
 .entry#render, .entry#timeline, .entry#documentation, .entry#leaderboard { background: #222; color:#999; z-index:0; resize: none; }
 .entry#timeline, .entry#documentation, .entry#leaderboard { display: none }
 

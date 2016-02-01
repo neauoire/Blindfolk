@@ -75,11 +75,12 @@ class Blindfolk
 		actionIndexClamped = @actionIndex % @rules[@status].length
 		command = @rules[@status][actionIndexClamped]
 
-		if command.include?("move.") then act_move(command) end
-		if command.include?("turn.") then act_turn(command) end
-		if command.include?("step.") then act_step(command) end
-		if command.include?("say ") then act_say(command) end
-		if command.include?("attack.") then act_attack(command) end
+		if command.include?("move.") then act_move(command)
+		elsif command.include?("turn.") then act_turn(command)
+		elsif command.include?("step.") then act_step(command)
+		elsif command.include?("say ") then act_say(command)
+		elsif command.include?("attack.") then act_attack(command)
+		else act_idle end
 
 		@actionIndex += 1
 
@@ -206,6 +207,12 @@ class Blindfolk
 
 		value = command.sub("say ","")
 		log("#{@name} says \"#{value}\".")
+
+	end
+
+	def act_idle
+
+		log("#{@name} idles.")
 
 	end
 

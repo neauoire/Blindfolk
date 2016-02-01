@@ -105,7 +105,7 @@ function loadDocumentation()
 		// Actions
 		documentationText += "# Actions Documentation\n\n";
 		$.each(documentation["actions"][0], function( _case, value ) {
-			documentationText += "<span class='sh_case'>case</span> <span class='sh_event'>"+_case+"</span> ";
+			documentationText += "<span class='sh_indent'>></span> <span class='sh_event'>"+_case+"</span> ";
 			// Methods
 			documentationText += "[ ";
 			$.each(value['methods'], function( index, _method ) {
@@ -176,6 +176,7 @@ function respawn()
 {
 	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.respawn.php", data: { token:token }}).done(function( content_raw ) {
 		loadTerminal();
+		loadLeaderboard();
 	});
 }
 
@@ -187,6 +188,7 @@ function renderTerminal()
 {
 	var text = syntaxHighlight($('#terminal').val());
 	$('#render').html(text+"_");
+	$('#memory').text(((($('#terminal').val().length/400)*100).toFixed(1))+"%");
 }
 
 function renderTimeline()
@@ -264,4 +266,31 @@ function setCookie(c_name,value,exdays)
 {
 	var exdate=new Date();
 	exdate.setDate(exdate.getDate() + exdays);
-	var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.to
+	var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+	document.cookie=c_name + "=" + c_value;
+}
+
+function readCookie(name)
+{
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
+}
+
+function countdown()
+{
+	time = new Date()
+	return (time.getMinutes() * 60) + time.getSeconds(); 
+}
+
+function generateToken()
+{
+	var seg1 = Math.random().toString(36).substr(2);
+	var seg2 = Math.random().toString(36).substr(2);
+    return seg1+seg2;
+};
