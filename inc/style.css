@@ -1,6 +1,16 @@
 
-*           { margin:0;padding:0;border:0;outline:0;text-decoration:none;font-weight:inherit;font-style:inherit;color:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;list-style:none;border-collapse:separate;border-spacing:0; -webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale; font-family: 'Input Mono';}
+*           { margin:0;padding:0;border:0;outline:0;text-decoration:none;font-weight:inherit;font-style:inherit;color:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;list-style:none;border-collapse:separate;border-spacing:0; -webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale; font-family: 'Input Mono','InputMono';}
 *:focus         { outline: none}
+
+@font-face {
+	font-family: 'InputMono';
+	src: url('http://blind.xxiivv.com/inc/subset-InputMono-Regular.eot');
+	src: url('http://blind.xxiivv.com/inc/subset-InputMono-Regular.eot?#iefix') format('embedded-opentype'),
+		url('http://blind.xxiivv.com/inc/subset-InputMono-Regular.woff') format('woff'),
+		url('http://blind.xxiivv.com/inc/subset-InputMono-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
 
 body { background:#111;}
 
