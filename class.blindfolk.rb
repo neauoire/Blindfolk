@@ -173,16 +173,11 @@ class Blindfolk
 		if target
 			log("#{@name} attacks #{target.name}.")
 			target.attacked(self) 
-		else 
-			log("#{@name} attacks nothing #{method} at #{new_x},#{new_y} from #{@x},#{@y}.")
-		end
-
-		# Land blow
-
-		if target && target.x == new_x && target.y == new_y
 			if @stamina > 0
 				kill(target)
 			end
+		else 
+			log("#{@name} attacks nothing #{method} at #{new_x},#{new_y} from #{@x},#{@y}.")
 		end
 
 	end
