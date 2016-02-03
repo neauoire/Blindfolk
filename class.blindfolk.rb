@@ -173,7 +173,7 @@ class Blindfolk
 		if target
 			log("#{@name} attacks #{target.name}.")
 			target.attacked(self) 
-			if @stamina > 0
+			if @stamina > 0 && target.isAlive == 1
 				kill(target)
 			end
 		else 

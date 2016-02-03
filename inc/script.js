@@ -146,7 +146,7 @@ function loadLeaderboard()
 		var count = 0;
 		$.each(leaderboard.players, function( index, value ) {
 			if( parseInt(value[2]) > 0 ){
-				leaderboardText += "<span class='sh_rank'>"+value[0]+"</span> <span class='sh_spacer'>|</span> <span class='sh_name'>Blindfolk #"+value[1]+"</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[2]+" kills</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[4]+" deaths</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[5]+" streak</span> <span class='sh_spacer'>|</span> <span>"+(parseInt(value[3]) == 1 ? "Alive" : "")+"</span>\n";
+				leaderboardText += "<span class='sh_rank'>"+value[0]+"</span> <span class='sh_spacer'>|</span> <blindfolk class='sh_name'>"+value[1]+"</blindfolk> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[2]+" kills</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[4]+" deaths</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[5]+" streak</span> <span class='sh_spacer'>|</span> <span>"+(parseInt(value[3]) == 1 ? "Alive" : "")+"</span>\n";
 			}
 			if(count> 10){ return false; }
 			count++;
@@ -199,6 +199,22 @@ function renderTimeline()
 	$('#timeline').html(text);
 }
 
+function renderLeaderboard()
+{
+	$('#timeline blindfolk').each( function() { 
+	  mytext =  $(this).text();  
+	  if( player && mytext == player.id ){
+	  	$(this).addClass("user"); 
+	  }
+	}); 
+	$('#leaderboard blindfolk').each( function() { 
+	  mytext =  $(this).text();  
+	  if( player && mytext == player.id ){
+	  	$(this).addClass("user"); 
+	  }
+	}); 
+}
+
 function syntaxHighlight(text)
 {
 	// Main
@@ -228,16 +244,6 @@ function syntaxHighlight(text)
 	// Etc..
 	text = text.replaceAll("  ", "<span class='sh_indent'>> </span>");
 	return text;
-}
-
-function renderLeaderboard()
-{
-	$('#timeline blindfolk').each( function() { 
-	  mytext =  $(this).text();  
-	  if( player && mytext == player.id ){
-	  	$(this).addClass("user"); 
-	  }
-	}); 
 }
 
 /* ===========================
