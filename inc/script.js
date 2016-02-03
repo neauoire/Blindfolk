@@ -1,5 +1,5 @@
 var token = readCookie("token");
-var player;
+var player = null;
 
 $(document).ready(function()
 {
@@ -60,8 +60,8 @@ function loadTerminal()
 {
 	$('#terminal').text("");
 
-	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"terminal", token:token } }).done(function( content_raw ) {
-		var player = JSON.parse(content_raw);
+	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"terminal", token:token } }).success(function( content_raw ) {
+		player = JSON.parse(content_raw);
 		$('#player_id').text(player.id);
 		$('#terminal').text(player.script);
 		renderTerminal();
@@ -81,7 +81,7 @@ function loadDocumentation()
 {
 	$('#documentation').text("");
 
-	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"documentation" } }).done(function( content_raw ) {
+	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"documentation" } }).success(function( content_raw ) {
 
 		var documentation = JSON.parse(content_raw);
 		var documentationText = "";
@@ -122,7 +122,7 @@ function loadTimeline()
 {
 	$('#timeline').text("");
 
-	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"timeline" } }).done(function( content_raw ) {
+	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"timeline" } }).success(function( content_raw ) {
 		var timeline = JSON.parse(content_raw);
 		var day = timeline[0];
 		var logs = timeline[1];
@@ -142,16 +142,18 @@ function loadLeaderboard()
 		$('#player_score').html(leaderboard.player.score);
 		$('#players_alive').html(leaderboard.playersCount.alive+"/"+leaderboard.playersCount.total+" Players");
 
-		var leaderboardText = "<span class='sh_rank'></span> <span class='sh_spacer'>|</span> <span class='sh_name'>Name</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Score</span>\n";
+		var leaderboardText = "<span class='sh_rank'></span> <span class='sh_spacer'>|</span> <span class='sh_name'>Name</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Score</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Deaths</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Streak</span>\n";
 		var count = 0;
 		$.each(leaderboard.players, function( index, value ) {
 			if( parseInt(value[2]) > 0 ){
-				leaderboardText += "<span class='sh_rank'>"+value[0]+"</span> <span class='sh_spacer'>|</span> <span class='sh_name'>Blindfolk #"+value[1]+"</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[2]+" kills</span> <span class='sh_spacer'>|</span> <span>"+(parseInt(value[3]) == 1 ? "Alive" : "")+"</span>\n";
+				leaderboardText += "<span class='sh_rank'>"+value[0]+"</span> <span class='sh_spacer'>|</span> <span class='sh_name'>Blindfolk #"+value[1]+"</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[2]+" kills</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[4]+" deaths</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[5]+" streak</span> <span class='sh_spacer'>|</span> <span>"+(parseInt(value[3]) == 1 ? "Alive" : "")+"</span>\n";
 			}
 			if(count> 10){ return false; }
 			count++;
 		});
 		$('#leaderboard').html(leaderboard.header+leaderboardText);
+
+		renderLeaderboard();
 
 	});
 }
@@ -228,6 +230,16 @@ function syntaxHighlight(text)
 	return text;
 }
 
+function renderLeaderboard()
+{
+	$('#timeline blindfolk').each( function() { 
+	  mytext =  $(this).text();  
+	  if( player && mytext == player.id ){
+	  	$(this).addClass("user"); 
+	  }
+	}); 
+}
+
 /* ===========================
 >  Counters
 =========================== */
@@ -251,6 +263,8 @@ setInterval(function()
 		loadTimeline();
 		$('#tab_timeline').addClass('notification');
 	}
+
+	renderLeaderboard();
 }, 1000);
 
 /* ===========================

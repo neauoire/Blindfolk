@@ -13,7 +13,7 @@ class Blindfolk
 		@orientation = 0
 		@x = 0
 		@y = 0
-		@name = "<blindfolk>Blindfolk ##{@id}</blindfolk>"
+		@name = "<blindfolk>#{@id}</blindfolk>"
 
 	end
 
@@ -36,7 +36,7 @@ class Blindfolk
 	end
 
 	def isAlive
-		return @isAlive
+		return @isAlive.to_i
 	end
 
 	def score
@@ -79,6 +79,7 @@ class Blindfolk
 		elsif command.include?("turn.") then act_turn(command)
 		elsif command.include?("step.") then act_step(command)
 		elsif command.include?("say ") then act_say(command)
+		elsif command.include?("taunt ") then act_taunt(command)
 		elsif command.include?("attack.") then act_attack(command)
 		else act_idle end
 
@@ -157,13 +158,14 @@ class Blindfolk
 			if @orientation == 1 then new_x += 1 end
 			if @orientation == 2 then new_y -= 1 end
 			if @orientation == 3 then new_x -= 1 end
-		end
-
-		if method == "backward"
+		elsif method == "backward"
 			if @orientation == 0 then new_y -= 1 end
 			if @orientation == 1 then new_x -= 1 end
 			if @orientation == 2 then new_y += 1 end
 			if @orientation == 3 then new_x += 1 end
+		else
+			log("#{@name} fails their attack.")
+			return
 		end
 
 		target = enemyAtLocation(new_x,new_y)
@@ -208,6 +210,13 @@ class Blindfolk
 
 	end
 
+	def act_taunt command
+
+		value = command.sub("taunt ","")
+		log("#{@name} #{value}.")
+
+	end
+
 	def act_idle
 
 		log("#{@name} idles.")
@@ -218,7 +227,7 @@ class Blindfolk
 
 	def collide enemy
 
-		log("#{@name} collides with \"#{enemy.name}\".")
+		log("#{@name} collides with #{enemy.name}.")
 
 		caseOrientation = ""
 

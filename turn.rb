@@ -42,7 +42,6 @@ def runPhase
 		end
 		if playersAlive == 1 then break end
 		$phase += 1
-		log("\n")
 	end
 
 	log("<phase># Game Over</phase>\n")
@@ -51,14 +50,6 @@ def runPhase
 	for player in $players
 		log("#{player.name} gains <score>#{player.score} point</score>.")
 		$database.updatePlayer(player)
-	end
-
-	# Last blindfolk standing
-	if playersAlive == 1
-		$players.each do |player|
-			if player.isAlive == 0 then next end
-			log("#{player.name} is the last one alive.")
-		end
 	end
 
 	# Format logs
