@@ -4,7 +4,7 @@ class Blindfolk
 
 		@id = id
 		@rules = parse(script)
-		@stamina = 10
+		@stamina = 11
 		@actionIndex = 0
 		@status = "default"
 		@isAlive = 1
