@@ -99,21 +99,22 @@ function timeline_ready()
 
 function leaderboard_ready()
 {
+	var playersAlive = 0
 	var leaderboardText = "<span class='sh_rank'></span> <span class='sh_name'>Name</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Score</span>\n";
-	var count = 0;
-	$.each(leaderboard.players, function( index, value ) {
-		leaderboardText += "<line class='"+(value.isAlive == 1 ? "Alive" : "")+"'><span class='sh_rank'>"+index+"</span> <blindfolk class='sh_name'>"+value.id+"</blindfolk> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value.kills+"K / "+value.deaths+"D ("+parseFloat(value.ratio).toFixed(2)+")</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+(value.streaks > 0 ? " Survivor X"+value.streaks : "")+"</span></line>\n";
-
+	$.each(leaderboard, function( index, value ) {
 		if(value.id == player.id){
-			$('#player_rank').html(index);
-			$('#player_score').html((parseFloat(value.kills)/parseFloat(value.deaths)).toFixed(1));
+			$('#player_rank').html(index+1);
+			$('#player_score').html(parseInt(value.kills)-parseInt(value.deaths));
 		}
-
-		if(count> 98){ return false; }
-		count++;
+		
+		leaderboardText += "<line><span class='sh_rank "+(value.isAlive == 1 ? "alive" : "")+"'>"+(index+1)+"</span> <blindfolk class='sh_name'>"+value.id+"</blindfolk> <span class='sh_spacer'>|</span> <span class='sh_score'>"+parseInt(value.ratio)+"</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value.kills+"K "+value.deaths+"D</span> <span class='sh_score'>"+(value.streaks > 0 ? " Survivor X "+value.streaks : "")+"</span></line>\n";
+		
+		if(value.isAlive == 1){
+			playersAlive++;
+		}
 	});
-	$('#leaderboard').html(leaderboard.header+leaderboardText);
-	$('#players_alive').html(leaderboard.playersCount.alive+"/"+leaderboard.players.length+" Players");
+	$('#leaderboard').html(leaderboardText);
+	$('#players_alive').html(playersAlive+"/"+leaderboard.length+" Players");
 
 	renderLeaderboard();
 }

@@ -39,7 +39,7 @@ documentation['actions'] = [
     'idle'    => { 'methods' => [], 'docs' => 'Do nothing for a turn.' }
 ]
 
-documentation['credits'] = ["This project was created by <a href='http://wiki.xxiivv.com/blind' target='_blank'>Devine Lu Linvega</a>. <br />The sources are available on <a href='https://github.com/XXIIVV/Blind' target='_blank'>Github</a>. <br />View updates on the <a href='http://wiki.xxiivv.com/blind:issues' target='_blank'>Changelog</a>. <br />Community <a href='https://twitter.com/search?q=%23blindfolkgame' target='_blank'>#blindfolkgame</a>"]
+documentation['credits'] = ["This project was created by <a href='http://wiki.xxiivv.com/blind' target='_blank'>Devine Lu Linvega</a>. <br />The sources are available on <a href='https://github.com/XXIIVV/Blind' target='_blank'>Github</a> | <a href='https://github.com/XXIIVV/Blind/issues' target='_blank'>Report Bug</a>. <br />View updates on the <a href='http://wiki.xxiivv.com/blind:issues' target='_blank'>Changelog</a>. <br />Community <a href='https://twitter.com/search?q=%23blindfolkgame' target='_blank'>#blindfolkgame</a>"]
 
 puts documentation.to_json
 

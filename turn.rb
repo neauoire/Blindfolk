@@ -44,11 +44,13 @@ def runPhase
 		$phase += 1
 	end
 
-	log("<phase># Game Over</phase>\n")
+	log("Game","<phase># Game Over</phase>\n")
 
 	# Save scores
 	for player in $players
-		log("Phase #{$phase}","#{player.name} gains <score>#{player.score} point</score>.")
+		if player.score > 0
+			log("Phase #{$phase}","#{player.name} gains <score>#{player.score} point</score>.")
+		end
 		$database.updatePlayer(player)
 	end
 

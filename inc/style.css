@@ -36,8 +36,9 @@ body { background:#111;}
 .sh_event { color:#fff; display:inline-block; border-bottom: 1px solid #444; line-height: 12px}
 .sh_method { color:#ffe7a5;}
 .sh_rank { display: inline-block; width:30px;}
+.sh_rank.alive { color:#fff; }
 .sh_name { display: inline-block; width:150px;}
-.sh_score { display: inline-block; width:175px;}
+.sh_score { display: inline-block; width:50px;}
 .sh_spacer { display: inline-block; width:15px; color:#333;}
 /* Timeline */
 blindfolk { display:inline; color:#ffe7a5; }
