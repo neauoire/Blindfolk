@@ -16,14 +16,14 @@ $database.connect()
 @players = $database.leaderboard()
 
 leaderboard = {}
-leaderboard["header"] = "Sorry about this awfully boring page,<br />I am currently building a better one.<br /><br />"
+leaderboard["header"] = "Year 1<br />Season 1<br />Ending on March 1st 2016<br /><br />"
 leaderboard["players"] = []
 leaderboard["playersCount"] = { "alive" => 0, "total" => 0 }
 
 rank = 1
 @players.each do |player|
 	# Rank
-	leaderboard["players"].push([rank,player[0],player[2],player[3],player[4],player[5]])
+	leaderboard["players"].push(player)
 	if player[1] == @token then leaderboard["player"] = { "rank" => rank, "score" => player[2] } end
 	rank += 1
 

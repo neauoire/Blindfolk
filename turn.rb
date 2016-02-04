@@ -14,10 +14,10 @@ $database.connect()
 
 $logs = {}
 
-def log event
+def log phase, event
 
-	if !$logs[$phase] then $logs[$phase] = [] end
-	$logs[$phase].push(event)
+	if !$logs[phase] then $logs[phase] = [] end
+	$logs[phase].push(event)
 
 end
 
@@ -36,7 +36,7 @@ def runPhase
 
 	$phase = 1
 	while $phase <= 10
-		log("<phase># Phase #{$phase}</phase>\n")
+		log("Phase #{$phase}","<phase># Phase #{$phase}</phase>\n")
 		for player in $players
 			player.act()
 		end
@@ -48,7 +48,7 @@ def runPhase
 
 	# Save scores
 	for player in $players
-		log("#{player.name} gains <score>#{player.score} point</score>.")
+		log("Phase #{$phase}","#{player.name} gains <score>#{player.score} point</score>.")
 		$database.updatePlayer(player)
 	end
 

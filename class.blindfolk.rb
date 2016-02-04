@@ -116,11 +116,11 @@ class Blindfolk
 		end
 
 		if enemyAtLocation(new_x,new_y)
-			log("#{@name} attemps to move, but is blocked by #{enemyAtLocation(new_x,new_y).name}.")
+			log("Phase #{$phase}","#{@name} attemps to move, but is blocked by #{enemyAtLocation(new_x,new_y).name}.")
 			collide(enemyAtLocation(new_x,new_y)) 
 		else 
 			@x = new_x ; @y = new_y 
-			log("#{@name} moved to #{@x},#{@y}.")
+			log("Phase #{$phase}","#{@name} moved to #{@x},#{@y}.")
 		end
 
 	end
@@ -146,11 +146,11 @@ class Blindfolk
 		end
 
 		if enemyAtLocation(new_x,new_y)
-			log("#{@name} attemps to step, but is blocked by #{enemyAtLocation(new_x,new_y).name}.")
+			log("Phase #{$phase}","#{@name} attemps to step, but is blocked by #{enemyAtLocation(new_x,new_y).name}.")
 			collide(enemyAtLocation(new_x,new_y)) 
 		else 
 			@x = new_x ; @y = new_y 
-			log("#{@name} moved to #{@x},#{@y}.")
+			log("Phase #{$phase}","#{@name} moved to #{@x},#{@y}.")
 		end
 
 	end
@@ -172,17 +172,17 @@ class Blindfolk
 			if @orientation == 2 then new_y += 1 end
 			if @orientation == 3 then new_x += 1 end
 		else
-			log("#{@name} fails their attack.")
+			log("Phase #{$phase}","#{@name} fails their attack.")
 			return
 		end
 
 		target = enemyAtLocation(new_x,new_y)
 
 		if target
-			log("#{@name} attacks #{target.name}.")
+			log("Phase #{$phase}","#{@name} attacks #{target.name}.")
 			target.attacked(self) 
 		else 
-			log("#{@name} attacks nothing #{method} at #{new_x},#{new_y} from #{@x},#{@y}.")
+			log("Phase #{$phase}","#{@name} attacks nothing #{method} at #{new_x},#{new_y} from #{@x},#{@y}.")
 		end
 
 		# Land blow after the riposte
@@ -207,27 +207,27 @@ class Blindfolk
 			@orientation = (@orientation - 1) & 3
 		end
 
-		log("#{@name} turns #{method}.")
+		log("Phase #{$phase}","#{@name} turns #{method}.")
 
 	end
 
 	def act_say command
 
 		value = command.sub("say ","")
-		log("#{@name} says \"#{value}\".")
+		log("Phase #{$phase}","#{@name} says \"#{value}\".")
 
 	end
 
 	def act_taunt command
 
 		value = command.sub("taunt ","")
-		log("#{@name} #{value}.")
+		log("Phase #{$phase}","#{@name} #{value}.")
 
 	end
 
 	def act_idle
 
-		log("#{@name} idles.")
+		log("Phase #{$phase}","#{@name} idles.")
 
 	end
 
@@ -235,7 +235,7 @@ class Blindfolk
 
 	def collide enemy
 
-		log("#{@name} collides with #{enemy.name}.")
+		log("Phase #{$phase}","#{@name} collides with #{enemy.name}.")
 
 		caseOrientation = ""
 
@@ -274,7 +274,7 @@ class Blindfolk
 		# Riposte
 
 		if @rules["collide.#{caseOrientation}"]
-			log("#{@name} counters!")
+			log("Phase #{$phase}","#{@name} counters!")
 			@status = "collide.#{caseOrientation}"
 			@actionIndex = 0
 			for riposte in @rules["collide.#{caseOrientation}"]
@@ -283,7 +283,7 @@ class Blindfolk
 			@status = "default"
 			@actionIndex = 0
 		elsif @rules["collide"]
-			log("#{@name} counters!")
+			log("Phase #{$phase}","#{@name} counters!")
 			@status = "collide"
 			@actionIndex = 0
 			for riposte in @rules["collide"]
@@ -318,7 +318,7 @@ class Blindfolk
 
 		# Riposte
 		if @rules["attack.#{caseOrientation}"]
-			log("#{@name} counters!")
+			log("Phase #{$phase}","#{@name} counters!")
 			@status = "attack.#{caseOrientation}"
 			@actionIndex = 0
 			for riposte in @rules["attack.#{caseOrientation}"]
@@ -327,7 +327,7 @@ class Blindfolk
 			@status = "default"
 			@actionIndex = 0
 		elsif @rules["attack"]
-			log("#{@name} counters!")
+			log("Phase #{$phase}","#{@name} counters!")
 			@status = "attack"
 			@actionIndex = 0
 			for riposte in @rules["attack"]
@@ -343,7 +343,7 @@ class Blindfolk
 
 	def kill enemy
 
-		log("#{@name} kills #{enemy.name}.")
+		log("Phase #{$phase}","#{@name} kills #{enemy.name}.")
 		@score += 1
 		enemy.die()
 

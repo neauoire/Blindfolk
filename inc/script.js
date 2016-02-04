@@ -99,20 +99,21 @@ function timeline_ready()
 
 function leaderboard_ready()
 {
-	$('#player_rank').html(leaderboard.player.rank);
-	$('#player_score').html(leaderboard.player.score);
-	$('#players_alive').html(leaderboard.playersCount.alive+"/"+leaderboard.playersCount.total+" Players");
-
-	var leaderboardText = "<span class='sh_rank'></span> <span class='sh_spacer'>|</span> <span class='sh_name'>Name</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Score</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Deaths</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Streak</span>\n";
+	var leaderboardText = "<span class='sh_rank'></span> <span class='sh_name'>Name</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Score</span>\n";
 	var count = 0;
 	$.each(leaderboard.players, function( index, value ) {
-		if( parseInt(value[2]) > 0 ){
-			leaderboardText += "<span class='sh_rank'>"+value[0]+"</span> <span class='sh_spacer'>|</span> <blindfolk class='sh_name'>"+value[1]+"</blindfolk> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[2]+" kills</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[4]+" deaths</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[5]+" streak</span> <span class='sh_spacer'>|</span> <span>"+(parseInt(value[3]) == 1 ? "Alive" : "")+"</span>\n";
+		leaderboardText += "<line class='"+(value.isAlive == 1 ? "Alive" : "")+"'><span class='sh_rank'>"+index+"</span> <blindfolk class='sh_name'>"+value.id+"</blindfolk> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value.kills+"K / "+value.deaths+"D ("+parseFloat(value.ratio).toFixed(2)+")</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+(value.streaks > 0 ? " Survivor X"+value.streaks : "")+"</span></line>\n";
+
+		if(value.id == player.id){
+			$('#player_rank').html(index);
+			$('#player_score').html((parseFloat(value.kills)/parseFloat(value.deaths)).toFixed(1));
 		}
-		if(count> 10){ return false; }
+
+		if(count> 98){ return false; }
 		count++;
 	});
 	$('#leaderboard').html(leaderboard.header+leaderboardText);
+	$('#players_alive').html(leaderboard.playersCount.alive+"/"+leaderboard.players.length+" Players");
 
 	renderLeaderboard();
 }
