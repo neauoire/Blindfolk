@@ -195,30 +195,35 @@ function renderDocumentation()
 	$('#documentation').html(documentationText);
 }
 
-function loadLeaderboard()
+function renderTerminal()
 {
-	$('#leaderboard').text("");
+	var maxLength = 500;
+	var input = $('#terminal').val().substring(0, maxLength);
+	var text = syntaxHighlight(input);
+	var percent = (((input.length/maxLength)*100).toFixed(1));
+	$('#render').html(text+"_");
+	$('#memory').text(percent+"%");
+	$('#terminal').val(input);
+}
 
-	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"leaderboard", token:token } }).done(function( content_raw ) {
-		var leaderboard = JSON.parse(content_raw);
-		$('#player_rank').html(leaderboard.player.rank);
-		$('#player_score').html(leaderboard.player.score);
-		$('#players_alive').html(leaderboard.playersCount.alive+"/"+leaderboard.playersCount.total+" Players");
+function renderTimeline()
+{
+}
 
-		var leaderboardText = "<span class='sh_rank'></span> <span class='sh_spacer'>|</span> <span class='sh_name'>Name</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Score</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Deaths</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Streak</span>\n";
-		var count = 0;
-		$.each(leaderboard.players, function( index, value ) {
-			if( parseInt(value[2]) > 0 ){
-				leaderboardText += "<span class='sh_rank'>"+value[0]+"</span> <span class='sh_spacer'>|</span> <blindfolk class='sh_name'>"+value[1]+"</blindfolk> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[2]+" kills</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[4]+" deaths</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[5]+" streak</span> <span class='sh_spacer'>|</span> <span>"+(parseInt(value[3]) == 1 ? "Alive" : "")+"</span>\n";
-			}
-			if(count> 10){ return false; }
-			count++;
-		});
-		$('#leaderboard').html(leaderboard.header+leaderboardText);
-
-		renderLeaderboard();
-
-	});
+function renderLeaderboard()
+{
+	$('#timeline blindfolk').each( function() { 
+	  mytext =  $(this).text();  
+	  if( player && mytext == player.id ){
+	  	$(this).addClass("user"); 
+	  }
+	}); 
+	$('#leaderboard blindfolk').each( function() { 
+	  mytext =  $(this).text();  
+	  if( player && mytext == player.id ){
+	  	$(this).addClass("user"); 
+	  }
+	}); 
 }
 
 /* ===========================
@@ -250,35 +255,6 @@ function respawn()
 /* ===========================
 >  Syntax Parsing
 =========================== */
-
-function renderTerminal()
-{
-	var text = syntaxHighlight($('#terminal').val());
-	$('#render').html(text+"_");
-	$('#memory').text(((($('#terminal').val().length/500)*100).toFixed(1))+"%");
-}
-
-function renderTimeline()
-{
-	var text = syntaxHighlight($('#timeline').text());
-	$('#timeline').html(text);
-}
-
-function renderLeaderboard()
-{
-	$('#timeline blindfolk').each( function() { 
-	  mytext =  $(this).text();  
-	  if( player && mytext == player.id ){
-	  	$(this).addClass("user"); 
-	  }
-	}); 
-	$('#leaderboard blindfolk').each( function() { 
-	  mytext =  $(this).text();  
-	  if( player && mytext == player.id ){
-	  	$(this).addClass("user"); 
-	  }
-	}); 
-}
 
 function syntaxHighlight(text)
 {
