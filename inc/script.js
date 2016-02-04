@@ -330,7 +330,6 @@ setInterval(function()
 
 	// Refresh when day is over
 	if(secondsUntilNextDay == 859){
-		loadTimeline();
 		$('#tab_timeline').addClass('notification');
 	}
 

@@ -107,6 +107,14 @@ class Blindfolk
 			if @orientation == 3 then new_x += 1 end
 		end
 
+		if method == "random"
+			random = rand() * 4
+			if random == 0 then new_y -= 1 end
+			if random == 1 then new_x -= 1 end
+			if random == 2 then new_y += 1 end
+			if random == 3 then new_x += 1 end
+		end
+
 		if enemyAtLocation(new_x,new_y)
 			log("#{@name} attemps to move, but is blocked by #{enemyAtLocation(new_x,new_y).name}.")
 			collide(enemyAtLocation(new_x,new_y)) 
@@ -173,11 +181,16 @@ class Blindfolk
 		if target
 			log("#{@name} attacks #{target.name}.")
 			target.attacked(self) 
+		else 
+			log("#{@name} attacks nothing #{method} at #{new_x},#{new_y} from #{@x},#{@y}.")
+		end
+
+		# Land blow after the riposte
+
+		if target && target.x == new_x && target.y == new_y
 			if @stamina > 0 && target.isAlive == 1
 				kill(target)
 			end
-		else 
-			log("#{@name} attacks nothing #{method} at #{new_x},#{new_y} from #{@x},#{@y}.")
 		end
 
 	end
@@ -333,6 +346,17 @@ class Blindfolk
 		log("#{@name} kills #{enemy.name}.")
 		@score += 1
 		enemy.die()
+
+		# Trigger the kill case
+		if @rules["kill"]
+			@status = "kill"
+			@actionIndex = 0
+			for riposte in @rules["kill"]
+				self.act()
+			end
+			@status = "default"
+			@actionIndex = 0
+		end
 
 	end
 

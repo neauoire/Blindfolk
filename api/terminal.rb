@@ -16,13 +16,9 @@ $database.connect()
 
 if @script.to_s != "" then $database.saveScript(@token,@script) end
 
-@script = $database.loadScript(@token)
+@player = $database.playerWithToken(@token)
 
-if @script
-	puts @script.to_json
-else
-	puts $database.createPlayer(@token).to_json
-end
+puts @player.to_json
 
 rescue Exception
 

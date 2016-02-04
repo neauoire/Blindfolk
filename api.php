@@ -1,6 +1,8 @@
 <?php
 
+header('Access-Control-Allow-Origin: *');
 header("Cache-Control: no-cache,no-store");
+header('Content-type: text/html; charset=utf-8');
 
 $route = preg_replace("/[^A-Za-z0-9]/", '', $_POST['route']);
 
@@ -22,6 +24,9 @@ if( $_POST['token'] ){
 // Routing
 if( $_POST['route'] == "respawn" ){
 	echo `ruby api/respawn.rb $token`;
+}
+else if( $_POST['route'] == "player" ){
+	echo `ruby api/player.rb $token`;
 }
 else if( $_POST['route'] == "leaderboard" ){
 	echo `ruby api/leaderboard.rb $token`;

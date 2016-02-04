@@ -31,7 +31,7 @@ documentation['cases'] = [
 ]
 
 documentation['actions'] = [
-    'move'    => { 'methods' => ['forward','backward'], 'docs' => 'Move toward the method direction.' },
+    'move'    => { 'methods' => ['forward','backward','random'], 'docs' => 'Move toward the method direction.' },
     'step'    => { 'methods' => ['left','right'], 'docs' => 'Sidestep toward the method direction.' },
     'turn'  => { 'methods' => ['left','right'], 'docs' => 'Turn anti-clockwise or clockwise.' },
     'attack'    => { 'methods' => ['forward','backward'], 'docs' => 'Attack toward the method direction.' },
