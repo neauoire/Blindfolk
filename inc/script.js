@@ -232,7 +232,7 @@ function save()
 
 	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"terminal", token:token, script:$('#terminal').val() }}).done(function( content_raw ) {
 		
-		try { var newPlayer = JSON.parse(content_raw); }
+		try { player = JSON.parse(content_raw); }
 		catch (e) { console.log(content_raw) };
 
 		$('#save').hide();
