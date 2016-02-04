@@ -1,13 +1,124 @@
 var token = readCookie("token");
-var player = null;
+var player;
+var documentation;
+var timeline;
+var leaderboard;
 
 $(document).ready(function()
 {
+	binds();
+	start();
+});
+
+function start()
+{
+	console.log("Token | Generating..");
 	if(!token){
 		token = generateToken();
 		setCookie("token",token,100);
 	}
+	console.log("Token | "+token);
 
+	console.log("Player | Loading..");
+	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"player", token:token } }).success(function( content_raw ) {
+
+		try { player = JSON.parse(content_raw); }
+		catch (e) { console.log(content_raw) };
+		player_ready();
+
+		console.log("Documentation | Loading..");
+		$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"documentation" } }).success(function( content_raw ) {
+
+			try { documentation = JSON.parse(content_raw); }
+			catch (e) { console.log(content_raw) };
+			documentation_ready();
+
+		});
+
+		console.log("Timeline | Loading..");
+		$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"timeline" } }).success(function( content_raw ) {
+
+			try { timeline = JSON.parse(content_raw); }
+			catch (e) { console.log(content_raw) };
+			timeline_ready();
+
+		});	
+
+		console.log("Leaderboard | Loading..");
+		$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"leaderboard", token:token } }).done(function( content_raw ) {
+
+			try { leaderboard = JSON.parse(content_raw); }
+			catch (e) { console.log(content_raw) };
+			leaderboard_ready();
+
+		});	
+	});
+}
+
+function player_ready()
+{
+	console.log("Player | Ready");
+
+	$('#player_id').text(player.id);
+
+	if(player.isAlive == 0){
+		$('#player_status').html("Dead.");
+		$('#player_respawn').css("display","inline");
+	}
+	else{
+		$('#player_status').html("Alive.");
+		$('#player_respawn').css("display","none");
+	}
+
+	// Terminal
+	$('#terminal').text("");
+	$('#terminal').val(player.script);
+	renderTerminal();
+}
+
+function documentation_ready()
+{
+	console.log("Documentation | Ready");
+
+	$('#documentation').text("");
+
+	renderDocumentation();
+}
+
+function timeline_ready()
+{
+	console.log("Timeline | Ready");
+
+	$('#timeline').text("");
+	var day = timeline[0];
+	var logs = timeline[1];
+	$('#timeline').html(logs);
+	$('#tab_timeline').html("# DAY "+day);
+	$('#next_day').html("Day "+(parseInt(day)+1));
+}
+
+function leaderboard_ready()
+{
+	$('#player_rank').html(leaderboard.player.rank);
+	$('#player_score').html(leaderboard.player.score);
+	$('#players_alive').html(leaderboard.playersCount.alive+"/"+leaderboard.playersCount.total+" Players");
+
+	var leaderboardText = "<span class='sh_rank'></span> <span class='sh_spacer'>|</span> <span class='sh_name'>Name</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Score</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Deaths</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Streak</span>\n";
+	var count = 0;
+	$.each(leaderboard.players, function( index, value ) {
+		if( parseInt(value[2]) > 0 ){
+			leaderboardText += "<span class='sh_rank'>"+value[0]+"</span> <span class='sh_spacer'>|</span> <blindfolk class='sh_name'>"+value[1]+"</blindfolk> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[2]+" kills</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[4]+" deaths</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value[5]+" streak</span> <span class='sh_spacer'>|</span> <span>"+(parseInt(value[3]) == 1 ? "Alive" : "")+"</span>\n";
+		}
+		if(count> 10){ return false; }
+		count++;
+	});
+	$('#leaderboard').html(leaderboard.header+leaderboardText);
+
+	renderLeaderboard();
+}
+
+function binds()
+{
 	$('#terminal').bind('input propertychange', function(){ 
 		renderTerminal();
 		$('#save').text('Save');
@@ -21,8 +132,6 @@ $(document).ready(function()
 	$('#player_respawn').bind( "click", function() { 
 		respawn();
 	});
-
-	// Bind Tabs
 
 	$('#tab_render').bind( "click", function() { 
 		$('#terminal').show();
@@ -45,91 +154,45 @@ $(document).ready(function()
 		$('#render').hide(); $('#timeline').hide(); $('#documentation').hide(); $('#leaderboard').show(); 
 		$('#tab_render').attr('class',''); $('#tab_timeline').attr('class',''); $('#tab_documentation').attr('class',''); $('#tab_leaderboard').attr('class','active'); 
 	});
-
-	loadTerminal();
-	loadDocumentation();
-	loadTimeline();
-	loadLeaderboard();
-});
+}
 
 /* ===========================
 >  API Connections
 =========================== */
 
-function loadTerminal()
+function renderDocumentation()
 {
-	$('#terminal').text("");
+	var documentationText = "";
 
-	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"terminal", token:token } }).success(function( content_raw ) {
-		player = JSON.parse(content_raw);
-		$('#player_id').text(player.id);
-		$('#terminal').text(player.script);
-		renderTerminal();
+	documentationText += "<phase># Introduction</phase>\n\n";
+	documentationText += documentation["introduction"]+"\n\n";
+	documentationText += "<phase># Fighting Styles</phase>\n\n";
+	documentationText += documentation["fighting"]+"\n\n";
 
-		if(player.isAlive == 0){
-			$('#player_status').html("Dead.");
-			$('#player_respawn').css("display","inline");
+	// Cases
+	documentationText += "<phase># Cases Documentation</phase>\n\n";
+	$.each(documentation["cases"][0], function( _case, value ) {
+		documentationText += "<span class='sh_case'>case</span> <span class='sh_event'>"+_case+"</span> ";
+		if(value['methods'].length > 0){
+			documentationText += "[ "; $.each(value['methods'], function( index, _method ) { documentationText += ".<span class='sh_method'>"+_method+"</span> "; }); documentationText += "]";
 		}
-		else{
-			$('#player_status').html("Alive.");
-			$('#player_respawn').css("display","none");
+		documentationText += "\n<span class=''>"+value["docs"]+"</span>\n\n";
+	});
+
+	// Actions
+	documentationText += "<phase># Actions Documentation</phase>\n\n";
+	$.each(documentation["actions"][0], function( _case, value ) {
+		documentationText += "<span class='sh_indent'>></span> <span class='sh_event'>"+_case+"</span> ";
+		if(value['methods'].length > 0){
+			documentationText += "[ "; $.each(value['methods'], function( index, _method ) { documentationText += ".<span class='sh_method'>"+_method+"</span> "; }); documentationText += "]";
 		}
+		documentationText += "\n<span class=''>"+value["docs"]+"</span>\n\n";
 	});
-}
 
-function loadDocumentation()
-{
-	$('#documentation').text("");
+	documentationText += "<phase># Exit</phase>\n\n";
+	documentationText += documentation["credits"]+"\n\n";
 
-	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"documentation" } }).success(function( content_raw ) {
-
-		var documentation = JSON.parse(content_raw);
-		var documentationText = "";
-
-		documentationText += "<phase># Introduction</phase>\n\n";
-		documentationText += documentation["introduction"]+"\n\n";
-		documentationText += "<phase># Fighting Styles</phase>\n\n";
-		documentationText += documentation["fighting"]+"\n\n";
-
-		// Cases
-		documentationText += "<phase># Cases Documentation</phase>\n\n";
-		$.each(documentation["cases"][0], function( _case, value ) {
-			documentationText += "<span class='sh_case'>case</span> <span class='sh_event'>"+_case+"</span> ";
-			if(value['methods'].length > 0){
-				documentationText += "[ "; $.each(value['methods'], function( index, _method ) { documentationText += ".<span class='sh_method'>"+_method+"</span> "; }); documentationText += "]";
-			}
-			documentationText += "\n<span class=''>"+value["docs"]+"</span>\n\n";
-		});
-
-		// Actions
-		documentationText += "<phase># Actions Documentation</phase>\n\n";
-		$.each(documentation["actions"][0], function( _case, value ) {
-			documentationText += "<span class='sh_indent'>></span> <span class='sh_event'>"+_case+"</span> ";
-			if(value['methods'].length > 0){
-				documentationText += "[ "; $.each(value['methods'], function( index, _method ) { documentationText += ".<span class='sh_method'>"+_method+"</span> "; }); documentationText += "]";
-			}
-			documentationText += "\n<span class=''>"+value["docs"]+"</span>\n\n";
-		});
-
-		documentationText += "<phase># Exit</phase>\n\n";
-		documentationText += documentation["credits"]+"\n\n";
-
-		$('#documentation').html(documentationText);
-	});
-}
-
-function loadTimeline()
-{
-	$('#timeline').text("");
-
-	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"timeline" } }).success(function( content_raw ) {
-		var timeline = JSON.parse(content_raw);
-		var day = timeline[0];
-		var logs = timeline[1];
-		$('#timeline').html(logs);
-		$('#tab_timeline').html("# DAY "+day);
-		$('#next_day').html("Day "+(parseInt(day)+1));
-	});
+	$('#documentation').html(documentationText);
 }
 
 function loadLeaderboard()
@@ -164,21 +227,23 @@ function loadLeaderboard()
 
 function save()
 {
+	console.log("Player | Saving..");
 	$('#save').text('Saving..');
 
 	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"terminal", token:token, script:$('#terminal').val() }}).done(function( content_raw ) {
-		var player = JSON.parse(content_raw);
-		$('#terminal').val(player.script);
+		
+		try { var newPlayer = JSON.parse(content_raw); }
+		catch (e) { console.log(content_raw) };
+
 		$('#save').hide();
-		renderTerminal();
+		player_ready();
 	});
 }
 
 function respawn()
 {
 	$.ajax({ type: "POST", url: "http://blind.xxiivv.com/api.php", data: { route:"respawn", token:token }}).done(function( content_raw ) {
-		loadTerminal();
-		loadLeaderboard();
+		start();
 	});
 }
 
@@ -265,7 +330,6 @@ setInterval(function()
 
 	// Refresh when day is over
 	if(secondsUntilNextDay == 859){
-		loadTerminal()
 		loadTimeline();
 		$('#tab_timeline').addClass('notification');
 	}
