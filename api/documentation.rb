@@ -36,6 +36,7 @@ documentation['actions'] = [
     'turn'  => { 'methods' => ['left','right'], 'docs' => 'Turn anti-clockwise or clockwise.' },
     'attack'    => { 'methods' => ['forward','backward'], 'docs' => 'Attack toward the method direction.' },
     'say'    => { 'methods' => [], 'docs' => 'Writes a string of text under 40 characters, to the timeline.' },
+    'mark'    => { 'methods' => [], 'docs' => 'Join a team of Blindfolks, AKA a book. <br />Maximum book name length is 10 characters, and the minimum 4.' },
     'idle'    => { 'methods' => [], 'docs' => 'Do nothing for a turn.' }
 ]
 

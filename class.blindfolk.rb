@@ -1,9 +1,10 @@
 class Blindfolk
 
-	def initialize id,script
+	def initialize id,script,book
 
 		@id = id
 		@rules = parse(script)
+		@book = book
 		@stamina = 11
 		@actionIndex = 0
 		@status = "default"
@@ -43,6 +44,10 @@ class Blindfolk
 		return @score
 	end
 
+	def book
+		return @book
+	end
+
 	# Parser
 
 	def parse code
@@ -78,9 +83,10 @@ class Blindfolk
 		if command.include?("move.") then act_move(command)
 		elsif command.include?("turn.") then act_turn(command)
 		elsif command.include?("step.") then act_step(command)
+		elsif command.include?("attack.") then act_attack(command)
 		elsif command.include?("say ") then act_say(command)
 		elsif command.include?("taunt ") then act_taunt(command)
-		elsif command.include?("attack.") then act_attack(command)
+		elsif command.include?("mark ") then act_mark(command)
 		else act_idle end
 
 		@actionIndex += 1
@@ -179,8 +185,13 @@ class Blindfolk
 		target = enemyAtLocation(new_x,new_y)
 
 		if target
-			log("Phase #{$phase}","#{@name} attacks #{target.name}.")
-			target.attacked(self) 
+			if target.book == book && book.length > 3
+				log("Phase #{$phase}","#{@name} rallies #{target.name}.")
+				target.charge()
+			else
+				log("Phase #{$phase}","#{@name} attacks #{target.name}.")
+				target.attacked(self) 
+			end
 		else 
 			log("Phase #{$phase}","#{@name} attacks nothing #{method} at #{new_x},#{new_y} from #{@x},#{@y}.")
 		end
@@ -188,7 +199,7 @@ class Blindfolk
 		# Land blow after the riposte
 
 		if target && target.x == new_x && target.y == new_y
-			if @stamina > 0 && target.isAlive == 1
+			if @stamina > 0 && target.isAlive == 1 && target.book != book
 				kill(target)
 			end
 		end
@@ -222,6 +233,14 @@ class Blindfolk
 
 		value = command.sub("taunt ","")
 		log("Phase #{$phase}","#{@name} #{value}.")
+
+	end
+
+	def act_mark command
+
+		value = command.sub("mark ","")
+		@book = value
+		log("Phase #{$phase}","#{@name} enters the book of <book>#{value}</book>.")
 
 	end
 
@@ -363,6 +382,13 @@ class Blindfolk
 	def die
 
 		@isAlive = 0
+
+	end
+
+	def charge
+
+		log("Phase #{$phase}","#{@name} gains +1 stamina!")
+		@stamina += 1
 
 	end
 

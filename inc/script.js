@@ -99,15 +99,37 @@ function timeline_ready()
 
 function leaderboard_ready()
 {
+	// Books
+	var books = {}
+	$.each(leaderboard, function( index, value ) {
+		if( value.book.length > 3 ){ 
+			if( !books[value.book] ){ books[value.book] = {} ; books[value.book]['score'] = 0; books[value.book]['players'] = 0; }
+			books[value.book]['score'] += parseInt(value.ratio); 
+			books[value.book]['players'] += 1; 
+		}
+	});
+
+	var leaderboardText = "<span class='sh_rank'></span> <span class='sh_name'>Book</span> <span class='sh_book'>Blindfolks</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Score</span>\n";
+
+	$.each(books, function( index, value ) {
+		leaderboardText += "<span class='sh_rank'></span> <span class='sh_name' style='color:white'>"+index+"</span> <span class='sh_book'>"+value.players+"</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value.score+"</span>\n";
+		console.log(index);
+	});
+
+	leaderboardText += "\n";
+
+	leaderboardText += "<span class='sh_rank'></span> <span class='sh_name'>Name</span> <span class='sh_book'>Book</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Score</span>\n";
+
+	// Players
 	var playersAlive = 0
-	var leaderboardText = "<span class='sh_rank'></span> <span class='sh_name'>Name</span> <span class='sh_spacer'>|</span> <span class='sh_score'>Score</span>\n";
 	$.each(leaderboard, function( index, value ) {
 		if(value.id == player.id){
 			$('#player_rank').html(index+1);
 			$('#player_score').html(parseInt(value.kills)-parseInt(value.deaths));
+			if( player.book.length > 3 ){ $('#player_book').html("["+player.book+"]"); }
 		}
-		
-		leaderboardText += "<line><span class='sh_rank "+(value.isAlive == 1 ? "alive" : "")+"'>"+(index+1)+"</span> <blindfolk class='sh_name'>"+value.id+"</blindfolk> <span class='sh_spacer'>|</span> <span class='sh_score'>"+parseInt(value.ratio)+"</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value.kills+"K "+value.deaths+"D</span> <span class='sh_score'>"+(value.streaks > 0 ? " Survivor X "+value.streaks : "")+"</span></line>\n";
+
+		leaderboardText += "<line><span class='sh_rank "+(value.isAlive == 1 ? "alive" : "")+"'>"+(index+1)+"</span> <blindfolk class='sh_name'>"+value.id+"</blindfolk> <span class='sh_book'>"+(value.book.length > 3 ? value.book : "")+"</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+parseInt(value.ratio)+"</span> <span class='sh_spacer'>|</span> <span class='sh_score'>"+value.kills+"K "+value.deaths+"D</span> <span class='sh_score'>"+(value.streaks > 0 ? " Survivor X "+value.streaks : "")+"</span></line>\n";
 		
 		if(value.isAlive == 1){
 			playersAlive++;
@@ -269,6 +291,7 @@ function syntaxHighlight(text)
 	text = text.replaceAll("turn.", "<span class='sh_action'>turn</span>.");
 	text = text.replaceAll("step.", "<span class='sh_action'>step</span>.");
 	text = text.replaceAll("say ", "<span class='sh_action'>say</span> ");
+	text = text.replaceAll("mark ", "<span class='sh_action'>mark</span> ");
 	text = text.replaceAll("idle", "<span class='sh_action'>idle</span>");
 	// Events
 	text = text.replaceAll(" collide", " <span class='sh_event'>collide</span>");
