@@ -98,21 +98,20 @@ class Blindfolk
 			if @orientation == 1 then new_x += 1 end
 			if @orientation == 2 then new_y -= 1 end
 			if @orientation == 3 then new_x -= 1 end
-		end
-
-		if method == "backward"
+		elsif method == "backward"
 			if @orientation == 0 then new_y -= 1 end
 			if @orientation == 1 then new_x -= 1 end
 			if @orientation == 2 then new_y += 1 end
 			if @orientation == 3 then new_x += 1 end
-		end
-
-		if method == "random"
+		elsif method == "random"
 			random = rand() * 4
 			if random == 0 then new_y -= 1 end
 			if random == 1 then new_x -= 1 end
 			if random == 2 then new_y += 1 end
 			if random == 3 then new_x += 1 end
+		else
+			log("Phase #{$phase}","#{@name} slips and fall, move.#{method} is invalid.")
+			return
 		end
 
 		if enemyAtLocation(new_x,new_y)
@@ -136,13 +135,14 @@ class Blindfolk
 			if @orientation == 1 then new_y += 1 end
 			if @orientation == 2 then new_x += 1 end
 			if @orientation == 3 then new_y -= 1 end
-		end
-
-		if method == "right"
+		elsif method == "right"
 			if @orientation == 0 then new_x += 1 end
 			if @orientation == 1 then new_y -= 1 end
 			if @orientation == 2 then new_x -= 1 end
 			if @orientation == 3 then new_y += 1 end
+		else
+			log("Phase #{$phase}","#{@name} slips and fall, step.#{method} is invalid.")
+			return
 		end
 
 		if enemyAtLocation(new_x,new_y)
