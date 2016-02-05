@@ -110,7 +110,7 @@ class Blindfolk
 			if random == 2 then new_y += 1 end
 			if random == 3 then new_x += 1 end
 		else
-			log("Phase #{$phase}","#{@name} slips and fall, move.#{method} is invalid.")
+			log("Phase #{$phase}","#{@name} slips and falls, move.#{method} is invalid.")
 			return
 		end
 
@@ -141,7 +141,7 @@ class Blindfolk
 			if @orientation == 2 then new_x -= 1 end
 			if @orientation == 3 then new_y += 1 end
 		else
-			log("Phase #{$phase}","#{@name} slips and fall, step.#{method} is invalid.")
+			log("Phase #{$phase}","#{@name} slips and falls, step.#{method} is invalid.")
 			return
 		end
 
