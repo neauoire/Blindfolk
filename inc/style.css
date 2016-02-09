@@ -41,12 +41,14 @@ body { background:#111;}
 .sh_score { display: inline-block; width:50px;}
 .sh_book { display: inline-block; width:80px;}
 .sh_spacer { display: inline-block; width:15px; color:#333;}
+
 /* Timeline */
 blindfolk { display:inline; color:#ffe7a5; }
 blindfolk:before { content:'Blindfolk #';}
 blindfolk.user:before, blindfolk.user { color:white; text-decoration: underline;}
 phase { display:inline; color:#555; }
 riposte { display: inline-block; padding-left:15px; line-height: 0px}
+stamina { display: inline-block; float:right; color:#777;}
 
 .options { color:white; width:175px;line-height: 17px;font-size:11px;top: 0px;position: absolute;}
 .options li { padding:0px 25px; color:#777;}

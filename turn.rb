@@ -14,10 +14,10 @@ $database.connect()
 
 $logs = {}
 
-def log phase, event
+def log phase, event, stamina = nil
 
 	if !$logs[phase] then $logs[phase] = [] end
-	$logs[phase].push(event)
+	$logs[phase].push(event+(stamina.to_i > 0 ? "<stamina>#{stamina} stamina</stamina>" : ""))
 
 end
 

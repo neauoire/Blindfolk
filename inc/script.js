@@ -307,6 +307,7 @@ function syntaxHighlight(text)
 	text = text.replaceAll(".back", ".<span class='sh_method'>back</span>");
 	text = text.replaceAll(".right", ".<span class='sh_method'>right</span>");
 	text = text.replaceAll(".left", ".<span class='sh_method'>left</span>");
+	text = text.replaceAll(".random", ".<span class='sh_method'>random</span>");
 	// Etc..
 	text = text.replaceAll("  ", "<span class='sh_indent'>> </span>");
 	return text;
